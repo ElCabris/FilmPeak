@@ -67,3 +67,8 @@ export default tseslint.config([
   },
 ])
 ```
+
+Nuevas dependencias agregadas:
+- react-dom
+- react-router-dom
+- tailwindcss
