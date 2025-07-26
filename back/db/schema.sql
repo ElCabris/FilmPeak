@@ -1,1 +1,1 @@
-CREATE TABLE movies (id int PRIMARY KEY, title text not null, year int null, description text);
+CREATE TABLE movies (id integer PRIMARY KEY, title text not null, year integer null, description text, file_path text not null, duration_minutes INTEGER);
