@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const NetflixLoginPage: React.FC = () => {
+const FilmPeakLoginPage: React.FC = () => {
   const [email, setEmail] = useState('Universidad 1349@gmail.com');
   const [password, setPassword] = useState('');
 
@@ -8,7 +8,7 @@ const NetflixLoginPage: React.FC = () => {
     <div className="min-h-screen bg-black text-white flex flex-col font-sans">
       {/* Cabecera con logo */}
       <header className="px-4 md:px-16 py-5">
-        <div className="text-red-600 font-bold text-4xl tracking-tight">NETFLIX</div>
+        <div className="text-red-600 font-bold text-4xl tracking-tight">FilmPeak</div>
       </header>
 
       {/* Contenido principal */}
@@ -68,18 +68,6 @@ const NetflixLoginPage: React.FC = () => {
         </div>
       </main>
 
-      {/* Banner inferior */}
-      <div className="w-full bg-gradient-to-r from-black via-gray-900 to-black border-t border-gray-800">
-        <div className="max-w-6xl mx-auto px-4 md:px-16 py-4 flex flex-col md:flex-row items-center justify-between">
-          <div>
-            <div className="text-2xl font-bold">GINNY & GEORGIA</div>
-            <div className="text-red-500 font-bold">ALERTA EXTREMA</div>
-          </div>
-          <button className="mt-4 md:mt-0 bg-white text-black px-6 py-2 rounded font-bold hover:bg-gray-200 transition flex items-center">
-            ▶ Reproducir
-          </button>
-        </div>
-      </div>
 
       {/* Footer */}
       <footer className="bg-black bg-opacity-90 px-4 md:px-16 py-6 text-gray-400 text-sm">
@@ -96,7 +84,7 @@ const NetflixLoginPage: React.FC = () => {
             </div>
           </div>
           <div className="border-t border-gray-800 pt-4 text-center">
-            © 2023 Netflix, Inc.
+            © 2025 FilmPeak, Inc.
           </div>
         </div>
       </footer>
@@ -104,4 +92,4 @@ const NetflixLoginPage: React.FC = () => {
   );
 };
 
-export default NetflixLoginPage;
+export default FilmPeakLoginPage;
