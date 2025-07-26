@@ -4,6 +4,9 @@
 ### Multidia files ###
 movies/
 
+## database files (sqlite3) ##
+*.db
+
 ### Python ###
 # Byte-compiled / optimized / DLL files
 __pycache__/
