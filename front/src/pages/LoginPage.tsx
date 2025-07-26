@@ -1,14 +1,20 @@
 import React, { useState } from 'react';
-
+import logo from '../assets/logo.png';
+import { useNavigate } from 'react-router-dom'; 
 const FilmPeakLoginPage: React.FC = () => {
-  const [email, setEmail] = useState('Universidad 1349@gmail.com');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   return (
-    <div className="min-h-screen bg-black text-white flex flex-col font-sans">
-      {/* Cabecera con logo */}
-      <header className="px-4 md:px-16 py-5">
-        <div className="text-red-600 font-bold text-4xl tracking-tight">FilmPeak</div>
+    <div className="min-h-screen bg-black text-white flex flex-col">
+      <header className="px-4 md:px-16 py-5 flex justify-between items-center">
+        <div className="flex items-center">
+          <img 
+            src={logo} 
+            alt="FilmPeak" 
+            className="h-50 md:h-46" 
+          />
+        </div>
       </header>
 
       {/* Contenido principal */}
@@ -23,7 +29,8 @@ const FilmPeakLoginPage: React.FC = () => {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full p-3 bg-gray-900 border border-gray-700 rounded text-white focus:outline-none focus:ring-1 focus:ring-red-600"
+                className="w-full p-3 bg-gray-900 border border-gray-700 rounded text-white focus:outline-none focus:ring-1 focus:ring-blue-600"
+                placeholder="123@gmail.com"
               />
             </div>
             
@@ -33,20 +40,20 @@ const FilmPeakLoginPage: React.FC = () => {
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full p-3 bg-gray-900 border border-gray-700 rounded text-white focus:outline-none focus:ring-1 focus:ring-red-600"
+                className="w-full p-3 bg-gray-900 border border-gray-700 rounded text-white focus:outline-none focus:ring-1 focus:ring-blue-600"
                 placeholder="**********"
               />
             </div>
           </div>
           
-          <button className="w-full bg-red-600 hover:bg-red-700 py-3 rounded font-bold text-lg transition duration-200 mb-6">
+          <button className="w-full bg-blue-500 hover:bg-blue-700 py-3 rounded font-bold text-lg transition duration-200 mb-6">
             Iniciar sesión
           </button>
           
           <div className="flex justify-between items-center mb-8">
             <div className="text-gray-400">
               <div className="flex items-center">
-                <input type="checkbox" className="mr-2 accent-red-600" />
+                <input type="checkbox" className="mr-2 accent-blue-600" />
                 <span>Recuérdame</span>
               </div>
             </div>
@@ -56,14 +63,10 @@ const FilmPeakLoginPage: React.FC = () => {
           </div>
           
           <div className="text-center mb-8">
-            <div className="text-gray-500 text-lg mb-1">¿Primera vez en Netflix? <a href="#" className="text-white hover:underline">Suscríbete ya.</a></div>
+            <div className="text-gray-500 text-lg mb-1">¿Primera vez en FilmPeak? <a href="#" className="text-white hover:underline">Suscríbete ya.</a></div>
             <div className="text-xs text-gray-600">
               Este sitio está protegido por Google reCAPTCHA para comprobar que no eres un robot.
             </div>
-          </div>
-          
-          <div className="text-center">
-            <div className="text-xl font-bold">SÁBADO</div>
           </div>
         </div>
       </main>
