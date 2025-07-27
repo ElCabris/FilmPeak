@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import mateoImage from '../assets/BoyIcon.webp';
 import andreImage from '../assets/BoyIcon.webp';
 import alejandraImage from '../assets/GirlIcon.webp';
@@ -12,6 +12,7 @@ interface Profile {
 
 const ProfileSelectionScreen = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [profiles, setProfiles] = useState<Profile[]>([
     { name: 'Mateo', avatar: mateoImage, isKidsProfile: false },
     { name: 'Andre', avatar: andreImage, isKidsProfile: false },
@@ -19,6 +20,17 @@ const ProfileSelectionScreen = () => {
   ]);
 
   const MAX_PROFILES = 5;
+
+  // Efecto para manejar nuevos perfiles creados
+  useEffect(() => {
+    if (location.state?.newProfile) {
+      const newProfile = location.state.newProfile;
+      setProfiles(prev => [...prev, newProfile]);
+      
+      // Limpiar el estado de navegación
+      navigate(location.pathname, { replace: true, state: {} });
+    }
+  }, [location.state, navigate, location.pathname]);
 
   const handleProfileSelect = (profileName: string) => {
     console.log(`Perfil seleccionado: ${profileName}`);
@@ -31,11 +43,6 @@ const ProfileSelectionScreen = () => {
       return;
     }
     navigate('/EditProfile');
-  };
-
-  const handleProfileCreated = (newProfile: Profile) => {
-    setProfiles([...profiles, newProfile]);
-    navigate('/profiles');
   };
 
   const handleManageProfiles = () => {
