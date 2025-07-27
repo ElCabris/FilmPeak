@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Avatar1 from '../assets/BoyIcon.webp';
 import Avatar2 from '../assets/GirlIcon.webp';
 import AddIcon from '../assets/add-icon.webp';
@@ -12,9 +12,6 @@ interface Profile {
 
 const EditProfilePage = () => {
   const navigate = useNavigate();
-  const location = useLocation();
-  const [onProfileCreated, setOnProfileCreated] = useState<((profile: Profile) => void) | null>(null);
-  
   const [name, setName] = useState('');
   const [isKidsProfile, setIsKidsProfile] = useState(false);
   const [selectedAvatar, setSelectedAvatar] = useState<string | null>(null);
@@ -25,13 +22,6 @@ const EditProfilePage = () => {
     { id: 1, image: Avatar1 },
     { id: 2, image: Avatar2 }
   ];
-
-  // Obtener la función de creación de perfil del estado de navegación
-  useEffect(() => {
-    if (location.state && location.state.onProfileCreated) {
-      setOnProfileCreated(() => location.state.onProfileCreated);
-    }
-  }, [location]);
 
   const handleAvatarSelect = (avatar: string) => {
     setSelectedAvatar(avatar);
@@ -61,17 +51,15 @@ const EditProfilePage = () => {
       return;
     }
 
-    // Si tenemos la función de creación, la llamamos
-    if (onProfileCreated) {
-      onProfileCreated({
-        name: name.trim(),
-        avatar: selectedAvatar,
-        isKidsProfile
-      });
-    }
+    // Crear el nuevo perfil
+    const newProfile = {
+      name: name.trim(),
+      avatar: selectedAvatar,
+      isKidsProfile
+    };
 
-    // Navegamos de vuelta
-    navigate('/profiles');
+    // Navegar de vuelta a la página de perfiles con el nuevo perfil en el estado
+    navigate('/profiles', { state: { newProfile } });
   };
 
   const handleCancel = () => {
