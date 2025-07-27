@@ -49,8 +49,7 @@ def read_movie(movie_id: int) -> Optional[Dict[str, Any]]:
             if result is None:
                 return None
 
-            columns = [column[0] for column in cursor.description]
-            return dict(zip(columns, result))
+            return dict(result)
 
     except sqlite3.Error as e:
         raise sqlite3.Error(f"Error reading movie with ID {movie_id}: {e}")
