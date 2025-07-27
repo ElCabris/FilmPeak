@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom';
 // Importa tus imágenes de avatar
 import Avatar1 from '../assets/BoyIcon.webp';
 import Avatar2 from '../assets/GirlIcon.webp';
-
 import AddIcon from '../assets/add-icon.webp';
 
 interface AddProfileScreenProps {
@@ -17,6 +16,7 @@ const AddProfileScreen: React.FC<AddProfileScreenProps> = ({ onProfileCreated })
   const [isKidsProfile, setIsKidsProfile] = useState(false);
   const [selectedAvatar, setSelectedAvatar] = useState<string | null>(null);
   const [showAvatarPicker, setShowAvatarPicker] = useState(false);
+  const [error, setError] = useState('');
   
   // Avatares disponibles
   const avatars = [
@@ -30,13 +30,27 @@ const AddProfileScreen: React.FC<AddProfileScreenProps> = ({ onProfileCreated })
   };
 
   const handleSave = () => {
+    setError('');
+    
     if (!name) {
-      alert('Por favor ingresa un nombre para el perfil');
+      setError('Por favor ingresa un nombre para el perfil');
       return;
     }
 
     if (!selectedAvatar) {
-      alert('Por favor selecciona un avatar');
+      setError('Por favor selecciona un avatar');
+      return;
+    }
+
+    // Validar que el nombre no esté vacío
+    if (name.trim() === '') {
+      setError('El nombre no puede estar vacío');
+      return;
+    }
+
+    // Validar longitud del nombre
+    if (name.length > 20) {
+      setError('El nombre debe tener menos de 20 caracteres');
       return;
     }
 
@@ -47,7 +61,7 @@ const AddProfileScreen: React.FC<AddProfileScreenProps> = ({ onProfileCreated })
       isKidsProfile
     });
 
-    // Navega de vuelta a la pantalla de perfiles
+    // Navegar de vuelta a la pantalla de perfiles
     navigate('/profiles');
   };
 
@@ -64,6 +78,9 @@ const AddProfileScreen: React.FC<AddProfileScreenProps> = ({ onProfileCreated })
           className="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors"
           onClick={handleCancel}
         >
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+          </svg>
         </button>
 
         {/* Título principal */}
@@ -93,21 +110,34 @@ const AddProfileScreen: React.FC<AddProfileScreenProps> = ({ onProfileCreated })
                   alt="Añadir avatar" 
                   className="w-12 h-12 opacity-70 group-hover:opacity-100 transition-opacity"
                 />
-
               </>
             )}
           </div>
         </div>
+        
+        {/* Mensaje de error */}
+        {error && (
+          <div className="mb-4 p-3 bg-red-900 text-red-200 rounded-lg text-center">
+            {error}
+          </div>
+        )}
         
         {/* Campo de nombre */}
         <div className="mb-8">
           <input
             type="text"
             value={name}
-            onChange={(e) => setName(e.target.value)}
+            onChange={(e) => {
+              setName(e.target.value);
+              setError('');
+            }}
             placeholder="Nombre"
             className="w-full bg-gray-800 py-3 px-4 rounded text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-600 transition-all"
+            maxLength={20}
           />
+          <p className="text-xs text-gray-500 mt-1 text-right">
+            {name.length}/20 caracteres
+          </p>
         </div>
         
         {/* Separador */}
@@ -123,14 +153,10 @@ const AddProfileScreen: React.FC<AddProfileScreenProps> = ({ onProfileCreated })
           {/* Toggle Switch */}
           <div 
             onClick={() => setIsKidsProfile(!isKidsProfile)}
-            className={`w-14 h-7 flex items-center rounded-full p-1 cursor-pointer transition-colors ${
-              isKidsProfile ? 'bg-blue-600' : 'bg-gray-600'
-            }`}
+            className={`w-14 h-7 flex items-center rounded-full p-1 cursor-pointer transition-colors ${isKidsProfile ? 'bg-blue-600' : 'bg-gray-600'}`}
           >
             <div 
-              className={`bg-white w-5 h-5 rounded-full shadow-md transform transition-transform ${
-                isKidsProfile ? 'translate-x-7' : ''
-              }`}
+              className={`bg-white w-5 h-5 rounded-full shadow-md transform transition-transform ${isKidsProfile ? 'translate-x-7' : ''}`}
             ></div>
           </div>
         </div>
