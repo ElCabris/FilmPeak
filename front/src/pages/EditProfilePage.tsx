@@ -1,6 +1,18 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-const AddProfileScreen = () => {
+// Importa tus imágenes de avatar
+import Avatar1 from '../assets/BoyIcon.webp';
+import Avatar2 from '../assets/GirlIcon.webp';
+
+import AddIcon from '../assets/add-icon.webp';
+
+interface AddProfileScreenProps {
+  onProfileCreated: (profile: { name: string; avatar: string; isKidsProfile: boolean }) => void;
+}
+
+const AddProfileScreen: React.FC<AddProfileScreenProps> = ({ onProfileCreated }) => {
+  const navigate = useNavigate();
   const [name, setName] = useState('');
   const [isKidsProfile, setIsKidsProfile] = useState(false);
   const [selectedAvatar, setSelectedAvatar] = useState<string | null>(null);
@@ -8,14 +20,39 @@ const AddProfileScreen = () => {
   
   // Avatares disponibles
   const avatars = [
-    "M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z",
-    "M12 14l9-5-9-5-9 5 9 5zm0 0l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222"
+    { id: 1, image: Avatar1 },
+    { id: 2, image: Avatar2 }
   ];
 
-  const handleAvatarSelect = (avatarPath: string) => {
-    setSelectedAvatar(avatarPath);
-    // Animación de selección
+  const handleAvatarSelect = (avatar: string) => {
+    setSelectedAvatar(avatar);
     setShowAvatarPicker(false);
+  };
+
+  const handleSave = () => {
+    if (!name) {
+      alert('Por favor ingresa un nombre para el perfil');
+      return;
+    }
+
+    if (!selectedAvatar) {
+      alert('Por favor selecciona un avatar');
+      return;
+    }
+
+    // Llama a la función para guardar el perfil
+    onProfileCreated({
+      name,
+      avatar: selectedAvatar,
+      isKidsProfile
+    });
+
+    // Navega de vuelta a la pantalla de perfiles
+    navigate('/profiles');
+  };
+
+  const handleCancel = () => {
+    navigate('/profiles');
   };
 
   return (
@@ -25,11 +62,8 @@ const AddProfileScreen = () => {
         {/* Botón de cerrar (X) */}
         <button 
           className="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors"
-          onClick={() => console.log('Cerrar pantalla')}
+          onClick={handleCancel}
         >
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-          </svg>
         </button>
 
         {/* Título principal */}
@@ -43,23 +77,23 @@ const AddProfileScreen = () => {
         {/* Selector de avatar */}
         <div className="flex justify-center mb-6">
           <div 
-            className="relative w-24 h-24 rounded-full bg-gray-800 flex items-center justify-center cursor-pointer group"
-            onClick={() => setShowAvatarPicker(!showAvatarPicker)}
+            className="relative w-24 h-24 rounded-full overflow-hidden bg-gray-800 flex items-center justify-center cursor-pointer group border-2 border-transparent hover:border-blue-600 transition-all"
+            onClick={() => setShowAvatarPicker(true)}
           >
             {selectedAvatar ? (
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d={selectedAvatar} />
-              </svg>
+              <img 
+                src={selectedAvatar} 
+                alt="Avatar seleccionado" 
+                className="w-full h-full object-cover"
+              />
             ) : (
               <>
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 text-gray-500 group-hover:text-white transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 4v16m8-8H4" />
-                </svg>
-                <span className="absolute bottom-0 right-0 bg-blue-600 rounded-full w-6 h-6 flex items-center justify-center">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                  </svg>
-                </span>
+                <img 
+                  src={AddIcon} 
+                  alt="Añadir avatar" 
+                  className="w-12 h-12 opacity-70 group-hover:opacity-100 transition-opacity"
+                />
+
               </>
             )}
           </div>
@@ -103,19 +137,25 @@ const AddProfileScreen = () => {
         
         {/* Botones */}
         <div className="flex space-x-4">
-          <button className="bg-white text-black font-medium py-3 px-6 rounded flex-1 hover:bg-opacity-90 transition hover:scale-[1.02]">
+          <button 
+            className="bg-white text-black font-medium py-3 px-6 rounded flex-1 hover:bg-opacity-90 transition hover:scale-[1.02]"
+            onClick={handleSave}
+          >
             Guardar
           </button>
-          <button className="bg-transparent border border-gray-600 text-gray-300 font-medium py-3 px-6 rounded flex-1 hover:bg-gray-800 transition hover:border-gray-400 hover:text-white">
+          <button 
+            className="bg-transparent border border-gray-600 text-gray-300 font-medium py-3 px-6 rounded flex-1 hover:bg-gray-800 transition hover:border-gray-400 hover:text-white"
+            onClick={handleCancel}
+          >
             Cancelar
           </button>
         </div>
       </div>
       
-      {/* Selector de avatares (aparece al hacer clic en el avatar) */}
+      {/* Selector de avatares */}
       {showAvatarPicker && (
-        <div className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50">
-          <div className="bg-gray-800 rounded-xl p-6 w-full max-w-xs animate-fade-in">
+        <div className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50 animate-fade-in">
+          <div className="bg-gray-800 rounded-xl p-6 w-full max-w-xs">
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-xl font-bold">Elige un avatar</h2>
               <button 
@@ -129,19 +169,21 @@ const AddProfileScreen = () => {
             </div>
             
             <div className="grid grid-cols-2 gap-4">
-              {avatars.map((avatar, index) => (
+              {avatars.map((avatar) => (
                 <div 
-                  key={index}
+                  key={avatar.id}
                   className={`p-4 rounded-lg cursor-pointer flex items-center justify-center transition-all ${
-                    selectedAvatar === avatar 
-                      ? 'bg-blue-600 scale-105' 
-                      : 'bg-gray-700 hover:bg-gray-600'
+                    selectedAvatar === avatar.image 
+                      ? 'bg-blue-400 scale-105 border-2 border-white' 
+                      : 'bg-gray-700 hover:bg-gray-600 border-2 border-transparent'
                   }`}
-                  onClick={() => handleAvatarSelect(avatar)}
+                  onClick={() => handleAvatarSelect(avatar.image)}
                 >
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d={avatar} />
-                  </svg>
+                  <img 
+                    src={avatar.image} 
+                    alt={`Avatar ${avatar.id}`} 
+                    className="w-16 h-16 object-cover rounded-full"
+                  />
                 </div>
               ))}
             </div>
