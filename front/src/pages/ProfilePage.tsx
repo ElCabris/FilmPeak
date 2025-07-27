@@ -22,7 +22,7 @@ const ProfileSelectionScreen = () => {
   // Función para crear nuevo perfil
   const handleAddProfile = () => {
     // Navegar a la pantalla de creación de perfil
-    navigate('/crear-perfil');
+    navigate('/EditProfile');
   };
 
   // Función para administrar perfiles
