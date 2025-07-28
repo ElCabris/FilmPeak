@@ -9,7 +9,7 @@ const FilmPeakLandingPage: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-
+    
     // Guardar email en localStorage
     localStorage.setItem('userEmail', email);
 
