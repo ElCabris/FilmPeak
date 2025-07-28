@@ -48,7 +48,7 @@ const FilmPeakAccountSetup: React.FC = () => {
     if (validateForm()) {
       localStorage.setItem('userEmail', email);
       localStorage.setItem('userPassword', password);
-      navigate('/home');
+      navigate('/SelectPlan');
     }
   };
 

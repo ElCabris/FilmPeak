@@ -5,6 +5,11 @@ import ProfilePage from './pages/ProfilePage';
 import EditProfile from './pages/EditProfilePage';
 import SelectMoviePage from './pages/SelectMoviePage';
 import Registration from './pages/signup/Registration';
+import SelectPlan from './pages/signup/SelectPlan';
+import PlanOptionsPage from './pages/signup/SelectPlanForm';
+import PaymentPicker from './pages/signup/PaymentPicker';
+import GiftOption from './pages/signup/PaymentOption/GiftOption';
+import CreditOption from './pages/signup/PaymentOption/CreditOption';
 
 function App() {
   return (
@@ -15,8 +20,17 @@ function App() {
       <Route path="/EditProfile" element={<EditProfile />} />
       <Route path='/SelectMovie' element={<SelectMoviePage />} />
       <Route path="/Registration" element={<Registration />} />
+      <Route path="/SelectPlan" element={<SelectPlan />} />
+      <Route path="/plan-options" element={<PlanOptionsPage />} />
+      <Route path="/PaymentPicker" element={<PaymentPicker />} />
+      <Route path="/payment/gift" element={<GiftOption />} />
+      <Route path="/payment/card" element={<CreditOption />} />
     </Routes>
   );
 }
 
 export default App;
+
+
+
+
