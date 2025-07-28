@@ -28,7 +28,7 @@ const CardPaymentPage: React.FC = () => {
   }, []);
 
   const handleStartMembership = () => {
-    navigate('/start-membership');
+    navigate('/SelectMovie');
   };
 
   const handleChangePlan = () => {
