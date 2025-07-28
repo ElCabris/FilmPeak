@@ -63,7 +63,8 @@ const FilmPeakLandingPage: React.FC = () => {
             />
             <button 
               type="submit"
-              className="bg-blue-500 hover:bg-blue-700 px-6 py-3 rounded font-bold flex items-center justify-center transition duration-300"
+              className="bg-blue-500 hover:bg-blue-700 px-6 py-3 rounded font-bold flex items-center justify-center transition duration-300 cursor-pointer"
+              onClick={() => navigate('/Registration')}
             >
               Comenzar
               <span className="ml-2 text-xl">&gt;</span>
