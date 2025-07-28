@@ -3,6 +3,49 @@ from typing import Optional
 from datetime import date
 from pathlib import Path
 
+movie_genre = [
+    "Acción",
+    "Aventura",
+    "Animación",
+    "Comedia",
+    "Crimen",
+    "Documental",
+    "Drama",
+    "Familiar",
+    "Fantasía",
+    "Histórico",
+    "Terror",
+    "Ciencia ficción",
+    "Misterio",
+    "Romance",
+    "Thriller",
+    "Bélico",
+    "Western",
+    "Musical",
+    "Biográfico",
+    "Deportivo",
+    "Policíaco",
+    "Suspense",
+    "Superhéroes",
+    "Gore",
+    "Fantástico",
+    "Cine negro",
+    "Paranormal",
+    "Zombies",
+    "Apocalíptico",
+    "Distopía",
+    "Erótico",
+    "Arte marcial",
+    "Espionaje",
+    "Catástrofe",
+    "Coming-of-age",
+    "Buddy movie",
+    "Road movie",
+    "Psicológico",
+    "Experimental",
+    "Found footage",
+]
+
 
 class MovieBase(BaseModel):
     """Base model to represent a film"""
@@ -14,6 +57,9 @@ class MovieBase(BaseModel):
     )
     duration_minutes: Optional[int] = Field(
         None, ge=1, le=300, example=148, description="movie length in minutes"
+    )
+    score: float = Field(
+        ..., ge=0, le=5, example=4.7, description="Movie rating score from 0 to 10"
     )
 
 
