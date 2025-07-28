@@ -10,13 +10,13 @@ const Navbar: React.FC = () => {
           <Link to="/" className="mr-10">
             <img 
               src={logo} 
-              alt="NETELLY Logo" 
-              className="h-10 object-contain" // Ajusta la altura
+              alt="FilmPeak Logo" 
+              className="h-20 object-contain" // Ajusta la altura
             />
           </Link>
           
-          <div className="hidden md:flex space-x-6">
-            {['Inicio', 'Serie', 'Periodas', 'Juegos', 'Novedades populares', 'MI Rita', 'Explora por idiomas'].map((item) => (
+          <div className="hidden md:flex space-x-8">
+            {['Inicio', 'Clasicos', 'Categorias', 'Novedades populares', 'Explora por idiomas'].map((item) => (
               <Link 
                 key={item} 
                 to="#"
@@ -29,12 +29,6 @@ const Navbar: React.FC = () => {
         </div>
         
         <div className="flex items-center space-x-4">
-          <Link 
-            to="/login" 
-            className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded transition-colors text-sm"
-          >
-            Iniciar sesión
-          </Link>
           <div className="w-8 h-8 rounded-full bg-gray-600 flex items-center justify-center">
             <span className="text-xs">JR</span>
           </div>

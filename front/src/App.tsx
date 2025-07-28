@@ -3,7 +3,7 @@ import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
 import ProfilePage from './pages/ProfilePage';
 import EditProfile from './pages/EditProfilePage';
-import SelectMoviePage from './pages/ProfilePage';
+import SelectMoviePage from './pages/SelectMoviePage';
 
 function App() {
   return (
