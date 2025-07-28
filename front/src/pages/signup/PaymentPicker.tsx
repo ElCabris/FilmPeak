@@ -14,10 +14,14 @@ import {
 const PaymentMethodPage: React.FC = () => {
   const navigate = useNavigate();
 
-  const handleSelect = (method: string) => {
-    localStorage.setItem('paymentMethod', method);
-    navigate('/confirmation'); // Cambia esta ruta si es necesario
-  };
+const handleSelect = (method: string) => {
+  localStorage.setItem('paymentMethod', method);
+  if (method === 'card') {
+    navigate('/payment/card');
+  } else if (method === 'gift') {
+    navigate('/payment/gift');
+  }
+};
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-black via-zinc-900 to-black text-white flex flex-col">
