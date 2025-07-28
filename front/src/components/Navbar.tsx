@@ -1,4 +1,3 @@
-// src/components/Navbar.tsx
 import React from 'react';
 import { Link } from 'react-router-dom';
 import logo from '../assets/logo.webp'; 
@@ -12,7 +11,7 @@ const Navbar: React.FC = () => {
             <img 
               src={logo} 
               alt="NETELLY Logo" 
-              className="h-10 object-contain" // Ajusta la altura según tu logo
+              className="h-10 object-contain" // Ajusta la altura
             />
           </Link>
           

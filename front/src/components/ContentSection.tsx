@@ -1,4 +1,3 @@
-// src/components/ContentSection.tsx
 import React from 'react';
 import RatingStars from './RatingStars';
 
