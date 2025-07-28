@@ -1,6 +1,6 @@
 # FilmPeak
 
-![FilmPeak](./front/public/logo.png)
+![FilmPeak](./front/public/logo_filmpeak.png)
 
 FilmPeak es una plataforma integral para amantes del cine que permite explorar, descubrir y evaluar películas de manera interactiva.
 Características Principales
@@ -13,4 +13,5 @@ Características Principales
 
     🧠 Sistema de recomendación: Sugerencias personalizadas basadas en tus gustos
 
-    🔍 Búsqueda avanzada: Filtra por género, año, director, actor, etc.ilmPeak es un sitio web donde puedes ver trailers de películas. La mejor opción para saber qué película ver.
+    🔍 Búsqueda avanzada: Filtra por género, año, director, actor, etc.ilmPeak es un sitio web donde puedes ver trailers de películas. 
+       La mejor opción para saber qué película ver.
