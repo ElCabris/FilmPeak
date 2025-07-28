@@ -1,6 +1,6 @@
 # FilmPeak
 
-![FilmPeak](./logo.png)
+![FilmPeak](./front/public/logo.png)
 
 FilmPeak es una plataforma integral para amantes del cine que permite explorar, descubrir y evaluar películas de manera interactiva.
 Características Principales
