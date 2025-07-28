@@ -1,6 +1,8 @@
 from fastapi import APIRouter, Request, HTTPException
 from fastapi.responses import StreamingResponse, Response
-from app.services.get_movie import get_movie_path
+from app.schemas.movie import MovieBase
+from app.services.get_movie import get_movie_path, create_movie_base
+from app.database.read_movie import get_all_movies as read_all_movies
 
 router = APIRouter()
 
@@ -72,3 +74,13 @@ async def watch_movie(movie_id: int, request: Request):
         raise HTTPException(
             status_code=500, detail=f"Error al procesar la solicitud: {str(e)}"
         )
+
+
+@router.get("/movie/getall")
+def get_all_movies():
+    movies = read_all_movies()
+    results = []
+    for movie in movies:
+        results.append(create_movie_base(movie))
+
+    return results

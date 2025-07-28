@@ -1,6 +1,7 @@
 from typing import Optional, Dict, Any
 from app.database.connection import get_db_connection
 from sqlite3 import Connection, Cursor, Error
+from app.core.logger import logger
 import sqlite3
 
 
@@ -38,7 +39,7 @@ def read_movie(movie_id: int) -> Optional[Dict[str, Any]]:
             cursor = conn.cursor()
             cursor.execute(
                 """
-            SELECT title, year, description, file_path, duration_minutes
+            SELECT *
             FROM movies
             WHERE id = ?
             """,
@@ -53,6 +54,28 @@ def read_movie(movie_id: int) -> Optional[Dict[str, Any]]:
 
     except sqlite3.Error as e:
         raise sqlite3.Error(f"Error reading movie with ID {movie_id}: {e}")
+    finally:
+        if "conn" in locals():
+            conn.close()
+
+
+def get_all_movies() -> list[dict[str, Any]]:
+    try:
+        conn = get_db_connection()
+        with conn:
+            cursor = conn.cursor()
+            logger.info("getting all the movies")
+            cursor.execute(
+                """SELECT *
+            FROM movies"""
+            )
+
+            rows = cursor.fetchall()
+            result = [dict(row) for row in rows]
+            logger.info(f"{len(result)} movies have been found")
+            return result
+    except sqlite3.Error as e:
+        raise sqlite3.Error()
     finally:
         if "conn" in locals():
             conn.close()
