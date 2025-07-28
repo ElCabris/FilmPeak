@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Footer from '../../components/Footer';
-import NavbarSignup from '../../components/NavbarSignupFirst';
+import NavbarSignup from '../../components/NavbarSignupSecond';
 
 const plans = [
   {
@@ -34,7 +34,7 @@ const plans = [
     audio: 'Incluido',
     devices: 'TV, computadora, teléfono, tablet',
     simultaneous: '4',
-    downloads: '6',
+    downloads: '5',
     color: 'text-red-600',
     popular: true
   }
@@ -53,17 +53,16 @@ const PlanOptionsPage: React.FC = () => {
     <div className="min-h-screen bg-black text-white flex flex-col">
       <NavbarSignup />
 
-      <main className="flex-grow px-4 py-12 mt-16 flex flex-col items-center">
-        <h2 className="text-center text-lg text-gray-400 mb-2">Paso 3 de 4</h2>
-        <h1 className="text-3xl font-bold text-center mb-10">Selecciona el plan ideal para ti</h1>
+      <main className="flex-grow px-6 py-12 mt-16 flex flex-col items-center">
+        <h1 className="text-4xl font-bold text-center mb-12">Selecciona el plan ideal para ti</h1>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl w-full">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 max-w-6xl w-full">
           {plans.map(plan => (
             <div
               key={plan.name}
               onClick={() => setSelectedPlan(plan.name)}
-              className={`relative bg-white text-black rounded-xl p-6 border-2 cursor-pointer transition-all
-                ${selectedPlan === plan.name ? 'border-blue-600' : 'border-gray-200'} 
+              className={`relative bg-white text-black rounded-xl px-8 py-10 min-h-[460px] border-2 cursor-pointer transition-all
+                ${selectedPlan === plan.name ? 'border-blue-600 scale-105' : 'border-gray-200'} 
                 hover:border-blue-400`}
             >
               {plan.popular && (
@@ -72,10 +71,10 @@ const PlanOptionsPage: React.FC = () => {
                 </div>
               )}
 
-              <h3 className={`text-xl font-bold mb-1 mt-4 ${plan.color}`}>{plan.name}</h3>
-              <p className="text-sm text-gray-600 mb-4">{plan.resolution}</p>
+              <h3 className={`text-2xl font-bold mb-2 mt-5 ${plan.color}`}>{plan.name}</h3>
+              <p className="text-base text-gray-600 mb-6">{plan.resolution}</p>
 
-              <div className="text-sm text-gray-700 space-y-2">
+              <div className="text-base text-gray-800 space-y-3">
                 <p><strong>Precio mensual:</strong> {plan.price}</p>
                 <p><strong>Calidad de audio y video:</strong> {plan.quality}</p>
                 <p><strong>Resolución:</strong> {plan.resolution}</p>
@@ -86,8 +85,8 @@ const PlanOptionsPage: React.FC = () => {
               </div>
 
               {selectedPlan === plan.name && (
-                <div className="absolute top-3 right-3 w-5 h-5 rounded-full bg-blue-600 flex items-center justify-center">
-                  <div className="w-2 h-2 bg-white rounded-full"></div>
+                <div className="absolute top-3 right-3 w-6 h-6 rounded-full bg-blue-600 flex items-center justify-center">
+                  <div className="w-2.5 h-2.5 bg-white rounded-full"></div>
                 </div>
               )}
             </div>
@@ -96,7 +95,7 @@ const PlanOptionsPage: React.FC = () => {
 
         <button
           onClick={handleNext}
-          className="mt-12 bg-blue-600 hover:bg-blue-700 px-8 py-4 rounded text-lg font-bold transition"
+          className="mt-14 bg-blue-600 hover:bg-blue-700 px-10 py-4 rounded text-lg font-bold transition"
         >
           Siguiente
         </button>
