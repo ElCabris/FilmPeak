@@ -7,7 +7,7 @@ const SelectPlanPage: React.FC = () => {
   const navigate = useNavigate();
 
   const handleNext = () => {
-    navigate('/plan-options'); // Cambia la ruta si necesitas
+    navigate('/plan-options');
   };
 
   return (
@@ -49,7 +49,7 @@ const SelectPlanPage: React.FC = () => {
 
           <button
             onClick={handleNext}
-            className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 rounded text-lg transition duration-200"
+            className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 rounded text-lg transition duration-200 cursor-pointer flex items-center justify-center"
           >
             Siguiente
           </button>
