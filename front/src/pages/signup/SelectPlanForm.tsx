@@ -52,7 +52,7 @@ const PlanOptionsPage: React.FC = () => {
 
   const handleNext = () => {
     localStorage.setItem('selectedPlan', selectedPlan);
-    navigate('/finish-signup');
+    navigate('/PaymentPicker');
   };
 
   return (

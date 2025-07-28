@@ -7,6 +7,7 @@ import SelectMoviePage from './pages/SelectMoviePage';
 import Registration from './pages/signup/Registration';
 import SelectPlan from './pages/signup/SelectPlan';
 import PlanOptionsPage from './pages/signup/SelectPlanForm';
+import PaymentPicker from './pages/signup/PaymentPicker';
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
       <Route path="/Registration" element={<Registration />} />
       <Route path="/SelectPlan" element={<SelectPlan />} />
       <Route path="/plan-options" element={<PlanOptionsPage />} />
+      <Route path="/PaymentPicker" element={<PaymentPicker />} />
     </Routes>
   );
 }
