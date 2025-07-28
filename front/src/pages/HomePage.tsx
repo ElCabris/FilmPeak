@@ -1,8 +1,7 @@
-// src/pages/FilmPeakLandingPage.tsx
 import React, { useState } from 'react';
-import logo from '../assets/logo.webp';
 import { useNavigate } from 'react-router-dom';
-import Footer from '../components/Footer'; // Importamos el componente Footer
+import Footer from '../components/Footer';
+import NavbarSignup from '../components/NavbarSignupFirst';
 
 const FilmPeakLandingPage: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -10,29 +9,18 @@ const FilmPeakLandingPage: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Email enviado:", email);
 
+    // Guardar email en localStorage
+    localStorage.setItem('userEmail', email);
+
+    // Ir a la página de registro
+    navigate('/Registration');
   };
 
   return (
-    <div className="min-h-screen bg-black text-white flex flex-col">
+    <div className="min-h-screen bg-gradient-to-b from-black/100 via-black/92 to-black/90 text-white flex flex-col">
+      <NavbarSignup />
 
-      <header className="px-4 md:px-16 py-5 flex justify-between items-center">
-        <div className="flex items-center">
-          <img 
-            src={logo} 
-            alt="FilmPeak" 
-            className="h-40 md:h-35" // Altura ajustada para mejor proporción
-          />
-        </div>
-        
-        <button 
-          className="bg-blue-500 hover:bg-blue-700 px-4 py-2 rounded font-bold transition duration-300"
-          onClick={() => navigate('/login')} 
-        >
-          Iniciar sesión
-        </button>
-      </header>
 
       {/* Contenido principal */}
       <main className="flex-grow flex flex-col items-center justify-center px-4 text-center">
@@ -64,7 +52,6 @@ const FilmPeakLandingPage: React.FC = () => {
             <button 
               type="submit"
               className="bg-blue-500 hover:bg-blue-700 px-6 py-3 rounded font-bold flex items-center justify-center transition duration-300 cursor-pointer"
-              onClick={() => navigate('/Registration')}
             >
               Comenzar
               <span className="ml-2 text-xl">&gt;</span>
@@ -76,7 +63,6 @@ const FilmPeakLandingPage: React.FC = () => {
       {/* Separador */}
       <div className="h-px bg-gray-800 my-8 mx-4 md:mx-16"></div>
 
-      {/* Usamos el componente Footer aquí */}
       <Footer />
     </div>
   );

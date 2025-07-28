@@ -7,7 +7,7 @@ const NavbarSignup: React.FC = () => {
   const navigate = useNavigate();
 
   return (
-    <nav className="fixed top-0 w-full bg-gradient-to-b from-black/90 via-black/85 to-black/75 z-50 px-2 py-3">
+    <nav className="fixed top-0 w-full left-0 bg-gradient-to-b from-black/90 via-black/80 to-black/50 z-50 px-2 py-3">
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         <div className="flex items-center">
           <Link to="/" className="mr-6">
