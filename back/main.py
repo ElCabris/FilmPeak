@@ -1,7 +1,6 @@
 from app.api.movie import router as movie_router
 from app.api.user import router as user_router
 from fastapi import FastAPI, Request
-from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.core.logger import logger
 
