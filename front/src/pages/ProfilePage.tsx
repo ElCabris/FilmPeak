@@ -1,65 +1,103 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import mateoImage from '../assets/BoyIcon.webp';
+import andreImage from '../assets/BoyIcon.webp';
+import alejandraImage from '../assets/GirlIcon.webp';
+
+interface Profile {
+  name: string;
+  avatar: string;
+  isKidsProfile: boolean;
+}
 
 const ProfileSelectionScreen = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [profiles, setProfiles] = useState<Profile[]>([
+    { name: 'Mateo', avatar: mateoImage, isKidsProfile: false },
+    { name: 'Andre', avatar: andreImage, isKidsProfile: false },
+    { name: 'Alejandra', avatar: alejandraImage, isKidsProfile: false }
+  ]);
+
+  const MAX_PROFILES = 5;
+
+  // Efecto para manejar nuevos perfiles creados
+  useEffect(() => {
+    if (location.state?.newProfile) {
+      const newProfile = location.state.newProfile;
+      setProfiles(prev => [...prev, newProfile]);
+      
+      // Limpiar el estado de navegación
+      navigate(location.pathname, { replace: true, state: {} });
+    }
+  }, [location.state, navigate, location.pathname]);
+
+  const handleProfileSelect = (profileName: string) => {
+    console.log(`Perfil seleccionado: ${profileName}`);
+    navigate('/SelectMovie');
+  };
+
+  const handleAddProfile = () => {
+    if (profiles.length >= MAX_PROFILES) {
+      alert(`No puedes tener más de ${MAX_PROFILES} perfiles`);
+      return;
+    }
+    navigate('/EditProfile');
+  };
+
+  const handleManageProfiles = () => {
+    navigate('/administrar-perfiles');
+  };
+
   return (
-<div className="min-h-screen bg-gray-900 flex flex-col items-center pt-64 pb-12 px-4">
-      {/* Título principal */}
-      <h1 className="text-white text-3xl font-medium mb-32">
+    <div className="min-h-screen bg-gray-900 flex flex-col items-center pt-64 pb-12 px-4">
+      <h1 className="text-white text-5xl font-medium mb-32">
         ¿Quién está viendo ahora?
       </h1>
 
-      {/* Contenedor de perfiles */}
       <div className="flex flex-wrap justify-center gap-12 max-w-4xl">
-        {/* Perfil Mateo */}
-        <div className="flex flex-col items-center cursor-pointer group">
-          <div className="w-32 h-32 rounded-full bg-gray-700 border-4 border-transparent group-hover:border-white transition-all mb-4" />
-          <span className="text-xl text-gray-300 group-hover:text-white transition-colors">
-            Mateo
-          </span>
-        </div>
-
-        {/* Perfil Andre */}
-        <div className="flex flex-col items-center cursor-pointer group">
-          <div className="w-32 h-32 rounded-full bg-gray-700 border-4 border-transparent group-hover:border-white transition-all mb-4" />
-          <span className="text-xl text-gray-300 group-hover:text-white transition-colors">
-            Andre
-          </span>
-        </div>
-
-        {/* Perfil Alejandra */}
-        <div className="flex flex-col items-center cursor-pointer group">
-          <div className="w-32 h-32 rounded-full bg-gray-700 border-4 border-transparent group-hover:border-white transition-all mb-4" />
-          <span className="text-xl text-gray-300 group-hover:text-white transition-colors">
-            Alejandra
-          </span>
-        </div>
-
-        {/* Perfil Sebas */}
-        <div className="flex flex-col items-center cursor-pointer group">
-          <div className="w-32 h-32 rounded-full bg-gray-700 border-4 border-transparent group-hover:border-white transition-all mb-4" />
-          <span className="text-xl text-gray-300 group-hover:text-white transition-colors">
-            Sebas
-          </span>
-        </div>
-
-        {/* Agregar perfil */}
-        <div className="flex flex-col items-center cursor-pointer group">
-          <div className="w-32 h-32 rounded-full bg-gray-800 border-4 border-transparent group-hover:border-gray-600 transition-all mb-4 flex items-center justify-center">
-            <div className="text-gray-500 text-6xl font-thin leading-none pb-2 group-hover:text-gray-400 transition-colors">
-              +
+        {profiles.map((profile) => (
+          <div 
+            key={profile.name}
+            className="flex flex-col items-center cursor-pointer group"
+            onClick={() => handleProfileSelect(profile.name)}
+          >
+            <div className="w-32 h-32 rounded-full border-4 border-transparent group-hover:border-white transition-all mb-4 overflow-hidden">
+              <img 
+                src={profile.avatar} 
+                alt={`Perfil de ${profile.name}`} 
+                className="w-full h-full object-cover"
+              />
             </div>
+            <span className="text-xl text-gray-300 group-hover:text-white transition-colors">
+              {profile.name}
+            </span>
           </div>
-          <span className="text-xl text-gray-500 group-hover:text-gray-400 transition-colors">
-            Agregar perfil
-          </span>
-        </div>
+        ))}
+
+        {profiles.length < MAX_PROFILES && (
+          <div 
+            className="flex flex-col items-center cursor-pointer group"
+            onClick={handleAddProfile}
+          >
+            <div className="w-32 h-32 rounded-full bg-gray-800 border-4 border-transparent group-hover:border-gray-600 transition-all mb-4 flex items-center justify-center">
+              <div className="text-gray-500 text-6xl font-thin leading-none pb-2 group-hover:text-gray-400 transition-colors">
+                +
+              </div>
+            </div>
+            <span className="text-xl text-gray-500 group-hover:text-gray-400 transition-colors">
+              Agregar perfil
+            </span>
+          </div>
+        )}
       </div>
 
-      {/* Separador */}
       <div className="w-full max-w-md border-t border-gray-700 my-12"></div>
 
-      {/* Botón administrar */}
-      <button className="px-8 py-3 border-2 border-gray-700 text-gray-400 text-lg font-medium hover:border-white hover:text-white transition-colors">
+      <button 
+        className="px-8 py-3 border-2 border-gray-700 text-gray-400 text-lg font-medium hover:border-white hover:text-white transition-colors"
+        onClick={handleManageProfiles}
+      >
         Administrar perfiles
       </button>
     </div>
