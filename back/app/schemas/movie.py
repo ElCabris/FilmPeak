@@ -50,6 +50,9 @@ movie_genre = [
 class MovieBase(BaseModel):
     """Base model to represent a film"""
 
+    id: int = Field(
+        None, ge=1, example=42, description="Unique identifier of the movie"
+    )
     name: str = Field(..., min_length=1, max_length=255, example="Inception")
     year: Optional[int] = Field(None, ge=1888, le=date.today().year + 2, example=2018)
     description: Optional[str] = Field(
@@ -58,8 +61,15 @@ class MovieBase(BaseModel):
     duration_minutes: Optional[int] = Field(
         None, ge=1, le=300, example=148, description="movie length in minutes"
     )
-    score: float = Field(
+    score: Optional[float] = Field(
         ..., ge=0, le=5, example=4.7, description="Movie rating score from 0 to 10"
+    )
+    genre: Optional[str] = Field(
+        ...,
+        min_length=1,
+        max_length=100,
+        example="Science Fiction",
+        description="Main genre of the movie",
     )
 
 
