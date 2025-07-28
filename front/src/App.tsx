@@ -8,6 +8,7 @@ import Registration from './pages/signup/Registration';
 import SelectPlan from './pages/signup/SelectPlan';
 import PlanOptionsPage from './pages/signup/SelectPlanForm';
 import PaymentPicker from './pages/signup/PaymentPicker';
+import GiftOption from './pages/signup/PaymentOption/GiftOption';
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
       <Route path="/SelectPlan" element={<SelectPlan />} />
       <Route path="/plan-options" element={<PlanOptionsPage />} />
       <Route path="/PaymentPicker" element={<PaymentPicker />} />
+      <Route path='/confirmation' element={<GiftOption />} />
     </Routes>
   );
 }

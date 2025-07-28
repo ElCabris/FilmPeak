@@ -8,8 +8,7 @@ import {
   LockClosedIcon,
   CreditCardIcon,
   GiftIcon,
-  ChevronRightIcon,
-  BanknotesIcon,
+  ChevronRightIcon
 } from '@heroicons/react/24/outline';
 
 const PaymentMethodPage: React.FC = () => {
@@ -44,7 +43,7 @@ const PaymentMethodPage: React.FC = () => {
           {/* Tarjeta */}
           <button
             onClick={() => handleSelect('card')}
-            className="w-full flex justify-between items-center bg-white rounded-lg px-6 py-5 hover:shadow-md transition"
+            className="w-full flex justify-between items-center bg-white rounded-lg px-6 py-5 hover:shadow-lg transform hover:scale-105 transition duration-300 ease-in-out"
           >
             <div className="flex items-center gap-3">
               <CreditCardIcon className="w-6 h-6 text-blue-600" />
@@ -53,11 +52,10 @@ const PaymentMethodPage: React.FC = () => {
             <ChevronRightIcon className="w-5 h-5 text-gray-500" />
           </button>
 
-
           {/* Código de regalo */}
           <button
             onClick={() => handleSelect('gift')}
-            className="w-full flex justify-between items-center bg-white rounded-lg px-6 py-5 hover:shadow-md transition"
+            className="w-full flex justify-between items-center bg-white rounded-lg px-6 py-5 hover:shadow-lg transform hover:scale-105 transition duration-300 ease-in-out"
           >
             <div className="flex items-center gap-3">
               <GiftIcon className="w-6 h-6 text-red-500" />
