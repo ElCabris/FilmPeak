@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import ContentSection from '../components/ContentSection';
 
@@ -20,6 +21,7 @@ function getRandomItems<T>(array: T[], count: number): T[] {
 const HomePage: React.FC = () => {
   const [movies, setMovies] = useState<Movie[]>([]);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetch('http://127.0.0.1:8000/movie/getall')
@@ -34,38 +36,29 @@ const HomePage: React.FC = () => {
       });
   }, []);
 
+  const handleMovieClick = (movie: Movie) => {
+    navigate(`/watch/${movie.id}`, { state: { movie } });
+  };
+
+  const mapMoviesWithClick = (movies: Movie[], count: number, featured = false) => {
+    return getRandomItems(movies, count).map(movie => ({
+      id: String(movie.id),
+      title: movie.name,
+      description: movie.description || '',
+      rating: movie.score,
+      featured,
+      onClick: () => handleMovieClick(movie)
+    }));
+  };
+
   if (loading) {
     return <div className="text-white text-center mt-32">Cargando contenido...</div>;
   }
 
-  const longTermPlans = getRandomItems(movies, 2).map(movie => ({
-    id: String(movie.id),
-    title: movie.name,
-    description: movie.description || '',
-    rating: movie.score
-  }));
-
-  const nextStory = getRandomItems(movies, 1).map(movie => ({
-    id: String(movie.id),
-    title: movie.name,
-    description: movie.description || '',
-    rating: movie.score,
-    featured: true
-  }));
-
-  const popularNews = getRandomItems(movies, 4).map(movie => ({
-    id: String(movie.id),
-    title: movie.name,
-    description: movie.description || '',
-    rating: movie.score
-  }));
-
-  const games = getRandomItems(movies, 3).map(movie => ({
-    id: String(movie.id),
-    title: movie.name,
-    description: movie.description || '',
-    rating: movie.score
-  }));
+  const longTermPlans = mapMoviesWithClick(movies, 2);
+  const nextStory = mapMoviesWithClick(movies, 1, true);
+  const popularNews = mapMoviesWithClick(movies, 4);
+  const games = mapMoviesWithClick(movies, 3);
 
   return (
     <div className="min-h-screen bg-gray-900 text-white">
