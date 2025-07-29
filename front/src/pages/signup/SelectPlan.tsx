@@ -7,7 +7,7 @@ const SelectPlanPage: React.FC = () => {
   const navigate = useNavigate();
 
   const handleNext = () => {
-    navigate('/plan-options');
+    navigate('/SelectPlanForm'); // Redirige a la página de opciones de plan
   };
 
   return (

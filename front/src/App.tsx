@@ -21,7 +21,7 @@ function App() {
       <Route path='/SelectMovie' element={<SelectMoviePage />} />
       <Route path="/Registration" element={<Registration />} />
       <Route path="/SelectPlan" element={<SelectPlan />} />
-      <Route path="/plan-options" element={<PlanOptionsPage />} />
+      <Route path="/SelectPlanForm" element={<PlanOptionsPage />} />
       <Route path="/PaymentPicker" element={<PaymentPicker />} />
       <Route path="/payment/gift" element={<GiftOption />} />
       <Route path="/payment/card" element={<CreditOption />} />
