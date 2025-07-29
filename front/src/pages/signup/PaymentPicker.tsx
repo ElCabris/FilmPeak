@@ -17,9 +17,9 @@ const PaymentMethodPage: React.FC = () => {
   const handleSelect = (method: string) => {
     localStorage.setItem('paymentMethod', method);
     if (method === 'card') {
-      navigate('/payment/card');
+      navigate('/CreditOption');
     } else if (method === 'gift') {
-      navigate('/payment/gift');
+      navigate('/GiftOption');
     }
   };
 

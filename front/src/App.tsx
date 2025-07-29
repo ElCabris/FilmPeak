@@ -23,8 +23,8 @@ function App() {
       <Route path="/SelectPlan" element={<SelectPlan />} />
       <Route path="/SelectPlanForm" element={<PlanOptionsPage />} />
       <Route path="/PaymentPicker" element={<PaymentPicker />} />
-      <Route path="/payment/gift" element={<GiftOption />} />
-      <Route path="/payment/card" element={<CreditOption />} />
+      <Route path="/GiftOption" element={<GiftOption />} />
+      <Route path="/CreditOption" element={<CreditOption />} />
     </Routes>
   );
 }
