@@ -10,12 +10,10 @@ const FilmPeakLoginPage: React.FC = () => {
   const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
   const navigate = useNavigate();
 
-  // Redirección a suscripción
   const handleStartSubscription = () => {
     navigate('/');
   };
 
-  // Validar formulario
   const validateForm = () => {
     const newErrors: { email?: string; password?: string } = {};
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -26,7 +24,6 @@ const FilmPeakLoginPage: React.FC = () => {
       newErrors.email = 'Correo electrónico inválido';
     }
 
-    // Validación de contraseña
     if (!password) {
       newErrors.password = 'La contraseña es requerida';
     } else if (password.length < 6) {
@@ -37,7 +34,6 @@ const FilmPeakLoginPage: React.FC = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  // Enviar formulario
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -49,10 +45,7 @@ const FilmPeakLoginPage: React.FC = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          email,
-          password,
-        }),
+        body: JSON.stringify({ email, password }),
       });
 
       if (!response.ok) {
@@ -69,14 +62,10 @@ const FilmPeakLoginPage: React.FC = () => {
       const data = await response.json();
       const { access_token, token_type } = data;
 
-      // Guardar token (puedes usar sessionStorage, localStorage o context)
       sessionStorage.setItem('accessToken', access_token);
       sessionStorage.setItem('tokenType', token_type);
 
-      // Marcar como autenticado y redirigir
-      sessionStorage.setItem('isAuthenticated', 'true');
       navigate('/profiles');
-
     } catch (err) {
       console.error('Error de red:', err);
       alert('No se pudo conectar al servidor. Verifica tu conexión.');
@@ -85,23 +74,18 @@ const FilmPeakLoginPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-black via-black/95 to-black/90 text-white flex flex-col">
-      {/* Navbar */}
       <NavbarLogin />
-
-      {/* Contenido principal */}
       <main className="flex-grow flex items-start justify-center px-4 pt-32 md:pt-40 pb-12">
         <form
           onSubmit={handleSubmit}
           className="w-full max-w-md bg-gray-900 bg-opacity-95 rounded-xl p-8 shadow-lg border border-gray-800"
         >
-          {/* Icono */}
           <div className="flex justify-center mb-4">
             <FingerPrintIcon className="w-12 h-12 text-blue-400" />
           </div>
 
           <h1 className="text-3xl font-bold text-center mb-8">Iniciar sesión</h1>
 
-          {/* Campo email */}
           <div className="mb-6">
             <label className="block text-sm text-gray-400 mb-1">Correo electrónico</label>
             <input
@@ -115,7 +99,6 @@ const FilmPeakLoginPage: React.FC = () => {
             {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
           </div>
 
-          {/* Campo password */}
           <div className="mb-6">
             <label className="block text-sm text-gray-400 mb-1">Contraseña</label>
             <input
@@ -129,7 +112,6 @@ const FilmPeakLoginPage: React.FC = () => {
             {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password}</p>}
           </div>
 
-          {/* Botón login */}
           <button
             type="submit"
             className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 py-3 rounded-xl font-semibold text-lg tracking-wide transition-all transform hover:scale-105 shadow-lg mb-6 cursor-pointer flex items-center justify-center"
@@ -137,7 +119,6 @@ const FilmPeakLoginPage: React.FC = () => {
             Iniciar sesión
           </button>
 
-          {/* Recordarme y ayuda */}
           <div className="flex justify-between items-center text-sm text-gray-400 mb-8">
             <label className="flex items-center space-x-2">
               <input type="checkbox" className="accent-blue-600 cursor-pointer" />
@@ -146,7 +127,6 @@ const FilmPeakLoginPage: React.FC = () => {
             <a href="#" className="hover:underline">¿Necesitas ayuda?</a>
           </div>
 
-          {/* Suscripción */}
           <div className="text-center mb-6 text-gray-400 text-sm">
             ¿Primera vez en FilmPeak?
             <button
@@ -158,14 +138,11 @@ const FilmPeakLoginPage: React.FC = () => {
             </button>
           </div>
 
-          {/* Recaptcha */}
           <p className="text-xs text-gray-500 text-center">
             Este sitio está protegido por Google reCAPTCHA para comprobar que no eres un robot.
           </p>
         </form>
       </main>
-
-      {/* Footer */}
       <Footer />
     </div>
   );
