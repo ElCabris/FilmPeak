@@ -17,7 +17,7 @@ const EditProfilePage = () => {
   const [selectedAvatar, setSelectedAvatar] = useState<string | null>(null);
   const [showAvatarPicker, setShowAvatarPicker] = useState(false);
   const [error, setError] = useState('');
-  
+
   const avatars = [
     { id: 1, image: Avatar1 },
     { id: 2, image: Avatar2 }
@@ -28,9 +28,9 @@ const EditProfilePage = () => {
     setShowAvatarPicker(false);
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     setError('');
-    
+
     if (!name) {
       setError('Por favor ingresa un nombre para el perfil');
       return;
@@ -51,15 +51,44 @@ const EditProfilePage = () => {
       return;
     }
 
-    // Crear el nuevo perfil
-    const newProfile = {
-      name: name.trim(),
-      avatar: selectedAvatar,
-      isKidsProfile
-    };
+    const userEmail = localStorage.getItem('userEmail') || sessionStorage.getItem('userEmail');
+    if (!userEmail) {
+      setError('No se encontró el correo del usuario');
+      return;
+    }
 
-    // Navegar de vuelta a la página de perfiles con el nuevo perfil en el estado
-    navigate('/profiles', { state: { newProfile } });
+    try {
+      const response = await fetch('http://127.0.0.1:8000/user/profiles/create', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          email: userEmail,
+          profile_name: name.trim()
+        })
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('Error al crear el perfil:', response.status, errorText);
+        setError('No se pudo crear el perfil. Intenta nuevamente.');
+        return;
+      }
+
+      // Si fue exitoso, continuar
+      const newProfile = {
+        name: name.trim(),
+        avatar: selectedAvatar,
+        isKidsProfile
+      };
+
+      navigate('/profiles', { state: { newProfile } });
+
+    } catch (err) {
+      console.error('Error de red:', err);
+      setError('No se pudo conectar al servidor.');
+    }
   };
 
   const handleCancel = () => {
@@ -69,7 +98,7 @@ const EditProfilePage = () => {
   return (
     <div className="min-h-screen bg-black text-white flex items-center justify-center p-4">
       <div className="relative bg-gray-900 rounded-xl p-8 max-w-md w-full border border-gray-700">
-        <button 
+        <button
           className="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors"
           onClick={handleCancel}
         >
@@ -82,34 +111,34 @@ const EditProfilePage = () => {
         <p className="text-gray-400 text-center mb-8">
           Agrega un perfil para otra persona que ve FilmPeak.
         </p>
-        
+
         <div className="flex justify-center mb-6">
-          <div 
+          <div
             className="relative w-24 h-24 rounded-full overflow-hidden bg-gray-800 flex items-center justify-center cursor-pointer group border-2 border-transparent hover:border-blue-600 transition-all"
             onClick={() => setShowAvatarPicker(true)}
           >
             {selectedAvatar ? (
-              <img 
-                src={selectedAvatar} 
-                alt="Avatar seleccionado" 
+              <img
+                src={selectedAvatar}
+                alt="Avatar seleccionado"
                 className="w-full h-full object-cover"
               />
             ) : (
-              <img 
-                src={AddIcon} 
-                alt="Añadir avatar" 
+              <img
+                src={AddIcon}
+                alt="Añadir avatar"
                 className="w-12 h-12 opacity-70 group-hover:opacity-100 transition-opacity"
               />
             )}
           </div>
         </div>
-        
+
         {error && (
           <div className="mb-4 p-3 bg-red-900 text-red-200 rounded-lg text-center">
             {error}
           </div>
         )}
-        
+
         <div className="mb-8">
           <input
             type="text"
@@ -126,33 +155,33 @@ const EditProfilePage = () => {
             {name.length}/20 caracteres
           </p>
         </div>
-        
+
         <div className="h-px bg-gray-800 w-full my-8"></div>
-        
+
         <div className="flex items-center justify-between mb-8">
           <div>
             <h2 className="font-bold text-lg">Perfil de niños</h2>
             <p className="text-gray-400 text-sm">Ver solo contenido infantil</p>
           </div>
-          
-          <div 
+
+          <div
             onClick={() => setIsKidsProfile(!isKidsProfile)}
             className={`w-14 h-7 flex items-center rounded-full p-1 cursor-pointer transition-colors ${isKidsProfile ? 'bg-blue-600' : 'bg-gray-600'}`}
           >
-            <div 
+            <div
               className={`bg-white w-5 h-5 rounded-full shadow-md transform transition-transform ${isKidsProfile ? 'translate-x-7' : ''}`}
             ></div>
           </div>
         </div>
-        
+
         <div className="flex space-x-4">
-          <button 
+          <button
             className="bg-white text-black font-medium py-3 px-6 rounded flex-1 hover:bg-opacity-90 transition hover:scale-[1.02]"
             onClick={handleSave}
           >
             Guardar
           </button>
-          <button 
+          <button
             className="bg-transparent border border-gray-600 text-gray-300 font-medium py-3 px-6 rounded flex-1 hover:bg-gray-800 transition hover:border-gray-400 hover:text-white"
             onClick={handleCancel}
           >
@@ -160,13 +189,13 @@ const EditProfilePage = () => {
           </button>
         </div>
       </div>
-      
+
       {showAvatarPicker && (
         <div className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50">
           <div className="bg-gray-800 rounded-xl p-6 w-full max-w-xs">
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-xl font-bold">Elige un avatar</h2>
-              <button 
+              <button
                 onClick={() => setShowAvatarPicker(false)}
                 className="text-gray-400 hover:text-white"
               >
@@ -175,28 +204,27 @@ const EditProfilePage = () => {
                 </svg>
               </button>
             </div>
-            
+
             <div className="grid grid-cols-2 gap-4">
               {avatars.map((avatar) => (
-                <div 
+                <div
                   key={avatar.id}
-                  className={`p-4 rounded-lg cursor-pointer flex items-center justify-center transition-all ${
-                    selectedAvatar === avatar.image 
-                      ? 'bg-blue-400 scale-105 border-2 border-white' 
+                  className={`p-4 rounded-lg cursor-pointer flex items-center justify-center transition-all ${selectedAvatar === avatar.image
+                      ? 'bg-blue-400 scale-105 border-2 border-white'
                       : 'bg-gray-700 hover:bg-gray-600 border-2 border-transparent'
-                  }`}
+                    }`}
                   onClick={() => handleAvatarSelect(avatar.image)}
                 >
-                  <img 
-                    src={avatar.image} 
-                    alt={`Avatar ${avatar.id}`} 
+                  <img
+                    src={avatar.image}
+                    alt={`Avatar ${avatar.id}`}
                     className="w-16 h-16 object-cover rounded-full"
                   />
                 </div>
               ))}
             </div>
-            
-            <button 
+
+            <button
               className="mt-6 w-full py-3 bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors"
               onClick={() => {
                 setSelectedAvatar(null);

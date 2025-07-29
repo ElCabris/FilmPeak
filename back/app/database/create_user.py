@@ -2,6 +2,7 @@ from app.services.passwords import hash_password
 from .connection import get_db_connection
 from app.schemas.user import UserRegister
 from sqlite3 import IntegrityError
+import sqlite3
 
 
 def create_user(user: UserRegister) -> int:
@@ -20,6 +21,8 @@ def create_user(user: UserRegister) -> int:
 
         conn.commit()
         return cursor.lastrowid
+    except sqlite3.Error as e:
+        raise ValueError()
     finally:
         conn.close()
 

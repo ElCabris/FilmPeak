@@ -23,14 +23,50 @@ const ProfileSelectionScreen = () => {
 
   // Efecto para manejar nuevos perfiles creados
   useEffect(() => {
-    if (location.state?.newProfile) {
-      const newProfile = location.state.newProfile;
-      setProfiles(prev => [...prev, newProfile]);
-      
-      // Limpiar el estado de navegación
-      navigate(location.pathname, { replace: true, state: {} });
-    }
-  }, [location.state, navigate, location.pathname]);
+    const fetchProfiles = async () => {
+      const userEmail = localStorage.getItem('userEmail') || sessionStorage.getItem('userEmail');
+
+      if (!userEmail) {
+        console.error('Email de usuario no encontrado');
+        navigate('/login'); // Redirige si no está autenticado
+        return;
+      }
+
+      try {
+        const response = await fetch(`http://127.0.0.1:8000/user/profiles/${userEmail}`);
+
+        if (!response.ok) {
+          const errorText = await response.text();
+          console.error(`Error al obtener perfiles: ${response.status} - ${errorText}`);
+          alert('No se pudieron cargar los perfiles');
+          return;
+        }
+
+        const data = await response.json();
+        const fetchedProfiles = data.profiles;
+
+        const avatarMap: Record<string, string> = {
+          'Mateo': mateoImage,
+          'Andre': andreImage,
+          'Alejandra': alejandraImage,
+        };
+
+        const updatedProfiles: Profile[] = fetchedProfiles.map((name: string) => ({
+          name,
+          avatar: avatarMap[name] || mateoImage, // avatar por defecto si no hay coincidencia
+          isKidsProfile: false, // puedes ajustar esto si tu backend lo incluye
+        }));
+
+        setProfiles(updatedProfiles);
+      } catch (error) {
+        console.error('Error al conectar con el servidor:', error);
+        alert('Ocurrió un error al cargar los perfiles.');
+      }
+    };
+
+    fetchProfiles();
+  }, [navigate]);
+
 
   const handleProfileSelect = (profileName: string) => {
     console.log(`Perfil seleccionado: ${profileName}`);
@@ -57,15 +93,15 @@ const ProfileSelectionScreen = () => {
 
       <div className="flex flex-wrap justify-center gap-12 max-w-4xl">
         {profiles.map((profile) => (
-          <div 
+          <div
             key={profile.name}
             className="flex flex-col items-center cursor-pointer group"
             onClick={() => handleProfileSelect(profile.name)}
           >
             <div className="w-32 h-32 rounded-full border-4 border-transparent group-hover:border-white transition-all mb-4 overflow-hidden">
-              <img 
-                src={profile.avatar} 
-                alt={`Perfil de ${profile.name}`} 
+              <img
+                src={profile.avatar}
+                alt={`Perfil de ${profile.name}`}
                 className="w-full h-full object-cover"
               />
             </div>
@@ -76,7 +112,7 @@ const ProfileSelectionScreen = () => {
         ))}
 
         {profiles.length < MAX_PROFILES && (
-          <div 
+          <div
             className="flex flex-col items-center cursor-pointer group"
             onClick={handleAddProfile}
           >
@@ -94,7 +130,7 @@ const ProfileSelectionScreen = () => {
 
       <div className="w-full max-w-md border-t border-gray-700 my-12"></div>
 
-      <button 
+      <button
         className="px-8 py-3 border-2 border-gray-700 text-gray-400 text-lg font-medium hover:border-white hover:text-white transition-colors"
         onClick={handleManageProfiles}
       >

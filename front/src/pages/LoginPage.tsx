@@ -38,12 +38,48 @@ const FilmPeakLoginPage: React.FC = () => {
   };
 
   // Enviar formulario
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    if (validateForm()) {
+
+    if (!validateForm()) return;
+
+    try {
+      const response = await fetch('http://127.0.0.1:8000/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email,
+          password,
+        }),
+      });
+
+      if (!response.ok) {
+        if (response.status === 401) {
+          setErrors({ password: 'Correo o contraseña incorrectos' });
+        } else {
+          const errorText = await response.text();
+          console.error(`Login error: ${response.status}: ${errorText}`);
+          alert('Error al iniciar sesión. Intenta nuevamente.');
+        }
+        return;
+      }
+
+      const data = await response.json();
+      const { access_token, token_type } = data;
+
+      // Guardar token (puedes usar sessionStorage, localStorage o context)
+      sessionStorage.setItem('accessToken', access_token);
+      sessionStorage.setItem('tokenType', token_type);
+
+      // Marcar como autenticado y redirigir
       sessionStorage.setItem('isAuthenticated', 'true');
       navigate('/profiles');
+
+    } catch (err) {
+      console.error('Error de red:', err);
+      alert('No se pudo conectar al servidor. Verifica tu conexión.');
     }
   };
 
@@ -72,9 +108,8 @@ const FilmPeakLoginPage: React.FC = () => {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className={`w-full px-4 py-3 bg-gray-800 border ${
-                errors.email ? 'border-red-500' : 'border-gray-700'
-              } rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-600`}
+              className={`w-full px-4 py-3 bg-gray-800 border ${errors.email ? 'border-red-500' : 'border-gray-700'
+                } rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-600`}
               placeholder="tu@email.com"
             />
             {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
@@ -87,9 +122,8 @@ const FilmPeakLoginPage: React.FC = () => {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className={`w-full px-4 py-3 bg-gray-800 border ${
-                errors.password ? 'border-red-500' : 'border-gray-700'
-              } rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-600`}
+              className={`w-full px-4 py-3 bg-gray-800 border ${errors.password ? 'border-red-500' : 'border-gray-700'
+                } rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-600`}
               placeholder="**********"
             />
             {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password}</p>}
@@ -114,7 +148,7 @@ const FilmPeakLoginPage: React.FC = () => {
 
           {/* Suscripción */}
           <div className="text-center mb-6 text-gray-400 text-sm">
-            ¿Primera vez en FilmPeak? 
+            ¿Primera vez en FilmPeak?
             <button
               type="button"
               onClick={handleStartSubscription}

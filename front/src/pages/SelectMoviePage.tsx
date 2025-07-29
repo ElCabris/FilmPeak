@@ -1,30 +1,71 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Navbar from '../components/Navbar';
 import ContentSection from '../components/ContentSection';
 
+interface Movie {
+  id: number;
+  name: string;
+  description: string | null;
+  year: number | null;
+  duration_minutes: number;
+  score: number;
+  genre: string;
+}
+
+function getRandomItems<T>(array: T[], count: number): T[] {
+  const shuffled = [...array].sort(() => 0.5 - Math.random());
+  return shuffled.slice(0, count);
+}
+
 const HomePage: React.FC = () => {
-  // Datos de ejemplo
-  const longTermPlans = [
-    { id: '1', title: 'TU PIOXÍTICA', description: 'DÁJECO CÁLCARA', rating: 4.7 },
-    { id: '2', title: 'DESCUBRÍAMENTO SALARIA', description: 'DESCUBRÍAMENTO SALARIA', rating: 4.3 },
-  ];
+  const [movies, setMovies] = useState<Movie[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const nextStory = [
-    { id: '3', title: 'STRANGER THINGS', description: 'Películas emocionantes', rating: 4.9, featured: true }
-  ];
+  useEffect(() => {
+    fetch('http://127.0.0.1:8000/movie/getall')
+      .then(res => res.json())
+      .then(data => {
+        setMovies(data);
+        setLoading(false);
+      })
+      .catch(err => {
+        console.error('Error al cargar películas:', err);
+        setLoading(false);
+      });
+  }, []);
 
-  const popularNews = [
-    { id: '4', title: 'DARK', description: 'Suspenso alemán', rating: 4.8 },
-    { id: '5', title: 'THE CROWN', description: 'Drama histórico', rating: 4.6 },
-    { id: '6', title: 'LUCIFER', description: 'Fantasía criminal', rating: 4.5 },
-    { id: '7', title: 'MONEY HEIST', description: 'Acción y suspenso', rating: 4.7 },
-  ];
+  if (loading) {
+    return <div className="text-white text-center mt-32">Cargando contenido...</div>;
+  }
 
-  const games = [
-    { id: '8', title: 'CYBERPUNK', description: 'Aventura futurista', rating: 4.2 },
-    { id: '9', title: 'THE WITCHER', description: 'Fantasía épica', rating: 4.9 },
-    { id: '10', title: 'MINECRAFT', description: 'Sandbox creativo', rating: 4.8 },
-  ];
+  const longTermPlans = getRandomItems(movies, 2).map(movie => ({
+    id: String(movie.id),
+    title: movie.name,
+    description: movie.description || '',
+    rating: movie.score
+  }));
+
+  const nextStory = getRandomItems(movies, 1).map(movie => ({
+    id: String(movie.id),
+    title: movie.name,
+    description: movie.description || '',
+    rating: movie.score,
+    featured: true
+  }));
+
+  const popularNews = getRandomItems(movies, 4).map(movie => ({
+    id: String(movie.id),
+    title: movie.name,
+    description: movie.description || '',
+    rating: movie.score
+  }));
+
+  const games = getRandomItems(movies, 3).map(movie => ({
+    id: String(movie.id),
+    title: movie.name,
+    description: movie.description || '',
+    rating: movie.score
+  }));
 
   return (
     <div className="min-h-screen bg-gray-900 text-white">
