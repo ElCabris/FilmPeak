@@ -17,7 +17,7 @@ const CardPaymentPage: React.FC = () => {
   const [plan, setPlan] = useState<PlanInfo | null>(null);
 
   useEffect(() => {
-    // Simulando información de planes desde localStorage
+    // Simulación de información de planes desde localStorage
     const selected = localStorage.getItem('selectedPlan') || 'Premium';
     const allPlans: Record<string, PlanInfo> = {
       'Básico': { name: 'Básico', resolution: '720p (HD)', price: '$18.900' },
@@ -32,11 +32,11 @@ const CardPaymentPage: React.FC = () => {
   };
 
   const handleChangePlan = () => {
-    navigate("/plan-options");
+    navigate("/SelectPlanForm"); // Redirige a la página de selección de plan
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-black via-zinc-900 to-black text-white flex flex-col">
+    <div className="min-h-screen bg-gradient-to-b from-black/100 via-black/92 to-black/90 text-white flex flex-col">
       <NavbarSignup />
 
       <main className="flex-grow px-6 py-16 mt-36 flex flex-col items-center">
@@ -56,10 +56,10 @@ const CardPaymentPage: React.FC = () => {
         </div>
 
         {/* Formulario */}
-        <div className="w-full max-w-lg space-y-6 bg-white text-black p-8 rounded-xl shadow-lg">
+        <div className="w-full max-w-lg space-y-6 bg-gray-900 text-white p-8 rounded-xl shadow-lg">
           {/* Información del plan */}
           {plan && (
-            <div className="bg-gray-100 p-4 rounded-md text-sm text-gray-800">
+            <div className="bg-gray-800 p-4 rounded-md text-sm text-gray-300">
               <p><strong>Plan:</strong> {plan.name}</p>
               <p><strong>Resolución:</strong> {plan.resolution}</p>
               <p><strong>Precio mensual:</strong> {plan.price}</p>
@@ -68,29 +68,29 @@ const CardPaymentPage: React.FC = () => {
 
           {/* Campos de tarjeta */}
           <label className="block">
-            <span className="block text-sm font-medium text-gray-700 mb-1">Número de tarjeta</span>
+            <span className="block text-sm font-medium text-gray-300 mb-1">Número de tarjeta</span>
             <input
               type="text"
               placeholder="•••• •••• •••• ••••"
-              className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </label>
 
           <div className="flex justify-between gap-4">
             <label className="flex-1">
-              <span className="block text-sm font-medium text-gray-700 mb-1">Fecha de vencimiento</span>
+              <span className="block text-sm font-medium text-gray-300 mb-1">Fecha de vencimiento</span>
               <input
                 type="text"
                 placeholder="MM/AA"
-                className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </label>
             <label className="flex-1">
-              <span className="block text-sm font-medium text-gray-700 mb-1">CVV</span>
+              <span className="block text-sm font-medium text-gray-300 mb-1">CVV</span>
               <input
                 type="text"
                 placeholder="123"
-                className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </label>
           </div>
@@ -98,7 +98,7 @@ const CardPaymentPage: React.FC = () => {
           {/* Cambiar plan */}
           <button
             onClick={handleChangePlan}
-            className="text-blue-500 text-sm underline hover:text-blue-400"
+            className="text-blue-400 text-sm underline hover:text-blue-300 cursor-pointer"
           >
             Cambiar plan
           </button>
@@ -106,7 +106,7 @@ const CardPaymentPage: React.FC = () => {
           {/* Iniciar membresía */}
           <button
             onClick={handleStartMembership}
-            className="w-full mt-4 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white py-3 rounded-lg font-semibold transition transform hover:scale-105"
+            className="w-full mt-10 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 py-4 rounded-xl text-lg font-semibold tracking-wide transition-all transform hover:scale-105 shadow-lg cursor-pointer"
           >
             Iniciar membresía
           </button>

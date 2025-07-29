@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Avatar1 from '../assets/BoyIcon.webp';
-import Avatar2 from '../assets/GirlIcon.webp';
-import AddIcon from '../assets/add-icon.webp';
+import Avatar1 from '../../assets/BoyIcon.webp';
+import Avatar2 from '../../assets/GirlIcon.webp';
+import AddIcon from '../../assets/add-icon.webp';
 
 interface Profile {
   name: string;

@@ -2,9 +2,9 @@ import { Routes, Route } from 'react-router-dom';
 import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
 import ProfilePage from './pages/ProfilePage';
-import EditProfile from './pages/EditProfilePage';
-import AdminProfiles from './pages/ManageProfilepage';
-import SettingsProfiles from './pages/ChangeProfileSettings';
+import EditProfile from './pages/profile/EditProfilePage';
+import AdminProfiles from './pages/profile/ManageProfilepage';
+import SettingsProfiles from './pages/profile/ChangeProfileSettings';
 import SelectMoviePage from './pages/SelectMoviePage';
 import Registration from './pages/signup/Registration';
 import SelectPlan from './pages/signup/SelectPlan';
@@ -25,10 +25,10 @@ function App() {
       <Route path='/SelectMovie' element={<SelectMoviePage />} />
       <Route path="/Registration" element={<Registration />} />
       <Route path="/SelectPlan" element={<SelectPlan />} />
-      <Route path="/plan-options" element={<PlanOptionsPage />} />
+      <Route path="/SelectPlanForm" element={<PlanOptionsPage />} />
       <Route path="/PaymentPicker" element={<PaymentPicker />} />
-      <Route path="/payment/gift" element={<GiftOption />} />
-      <Route path="/payment/card" element={<CreditOption />} />
+      <Route path="/GiftOption" element={<GiftOption />} />
+      <Route path="/CreditOption" element={<CreditOption />} />
     </Routes>
   );
 }

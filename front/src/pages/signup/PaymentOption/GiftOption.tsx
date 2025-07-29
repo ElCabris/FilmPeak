@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { GiftIcon } from '@heroicons/react/24/solid';
 import Footer from '../../../components/Footer';
 import NavbarSignup from '../../../components/NavbarSignupSecond';
 
@@ -13,53 +14,62 @@ const GiftCodePage: React.FC = () => {
   };
 
   const handleChangePlan = () => {
-    navigate("/plan-options"); // Ruta donde eliges los planes
+    navigate("/SelectPlanForm"); // Redirige a la página de selección de plan
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-black via-zinc-900 to-black text-white flex flex-col">
+    <div className="min-h-screen bg-gradient-to-b from-black/100 via-black/92 to-black/90 text-white flex flex-col">
       <NavbarSignup />
 
-      <main className="flex-grow px-6 py-16 mt-24 flex flex-col items-center">
-        <span className="text-sm text-gray-400 font-semibold mb-2">Paso 3 de 3</span>
+      <main className="flex-grow px-6 py-16 mt-28 flex flex-col items-center">
+        {/* Ícono de regalo */}
+        <GiftIcon className="w-12 h-12 text-blue-400 mb-4" />
 
-        <h1 className="text-3xl md:text-4xl font-bold text-center mb-8">
+        <h1 className="text-3xl md:text-4xl font-bold text-center mb-6">
           Ingresa tu código de regalo
         </h1>
 
-        {/* Formulario */}
-        <div className="w-full max-w-md space-y-4 bg-white rounded-lg p-6 text-black shadow-md">
+        <p className="text-gray-400 text-center mb-8 max-w-xl text-sm leading-relaxed">
+          Introduce el PIN o código de tu tarjeta de regalo tal como aparece.
+        </p>
+
+        {/* Contenedor formulario */}
+        <div className="w-full max-w-md space-y-5 bg-gray-900 text-white rounded-xl p-8 shadow-lg">
+          
+          {/* Input código */}
           <input
             type="text"
             value={code}
             onChange={(e) => setCode(e.target.value)}
             placeholder="PIN o código de la tarjeta de regalo"
-            className="w-full border border-gray-300 rounded px-4 py-3 text-base focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
 
           {/* Plan activo */}
-          <div className="flex justify-between items-center text-sm bg-gray-100 rounded px-4 py-3">
+          <div className="flex justify-between items-center text-sm bg-gray-800 rounded-lg px-4 py-3">
             <div>
-              <p className="font-medium">$ 44.900 al mes</p>
-              <p className="text-gray-600">Premium</p>
+              <p className="font-semibold text-white">$ 44.900 al mes</p>
+              <p className="text-gray-400">Premium</p>
             </div>
             <button
               onClick={handleChangePlan}
-              className="text-blue-600 font-semibold hover:underline text-sm"
+              className="text-blue-400 text-sm font-semibold hover:text-blue-300 cursor-pointer"
             >
               Cambiar
             </button>
           </div>
 
+          {/* Botón canjear */}
           <button
             onClick={handleRedeem}
             disabled={!code.trim()}
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded transition-all duration-300 shadow-lg hover:shadow-blue-500/50 focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full mt-6 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 py-4 rounded-xl text-lg font-semibold tracking-wide transition-all transform hover:scale-105 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
           >
             Canjear código de regalo
           </button>
-
-          <p className="text-xs text-gray-500 mt-2 text-center">
+          
+          {/* Información adicional */}
+          <p className="text-xs text-gray-500 mt-4 text-center">
             Esta página está protegida por Google reCAPTCHA para comprobar que no eres un robot.
           </p>
         </div>

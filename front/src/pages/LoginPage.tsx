@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
-import logo from '../assets/logo.webp';
-import { useNavigate } from 'react-router-dom'; 
+import { useNavigate } from 'react-router-dom';
+import NavbarLogin from '../components/NavbarLogin';
+import Footer from '../components/Footer';
+import { FingerPrintIcon } from '@heroicons/react/24/solid';
 
 const FilmPeakLoginPage: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -8,146 +10,129 @@ const FilmPeakLoginPage: React.FC = () => {
   const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
   const navigate = useNavigate();
 
-  // Función para validar el formulario
+  // Redirección a suscripción
+  const handleStartSubscription = () => {
+    navigate('/');
+  };
+
+  // Validar formulario
   const validateForm = () => {
     const newErrors: { email?: string; password?: string } = {};
-    
-    // Validación de email
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
     if (!email) {
       newErrors.email = 'El correo es requerido';
     } else if (!emailRegex.test(email)) {
       newErrors.email = 'Correo electrónico inválido';
     }
-    
+
     // Validación de contraseña
     if (!password) {
       newErrors.password = 'La contraseña es requerida';
     } else if (password.length < 6) {
       newErrors.password = 'La contraseña debe tener al menos 6 caracteres';
     }
-    
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
-  // Manejar el envío del formulario
+  // Enviar formulario
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
     if (validateForm()) {
-      // Aquí normalmente haríamos una petición a la API para autenticar
-      // Pero por ahora simularemos una autenticación exitosa
-      
-      // Guardar estado de autenticación (en un caso real usaríamos context, Redux o localStorage)
       sessionStorage.setItem('isAuthenticated', 'true');
-      
-      // Redirigir a la página de selección de perfiles
       navigate('/profiles');
     }
   };
 
   return (
-    <div className="min-h-screen bg-black text-white flex flex-col">
-      <header className="px-4 md:px-16 py-5 flex justify-between items-center">
-        <div className="flex items-center">
-          <img 
-            src={logo} 
-            alt="FilmPeak" 
-            className="h-50 md:h-46" 
-          />
-        </div>
-      </header>
+    <div className="min-h-screen bg-gradient-to-b from-black via-black/95 to-black/90 text-white flex flex-col">
+      {/* Navbar */}
+      <NavbarLogin />
 
       {/* Contenido principal */}
-      <main className="flex-grow flex items-center justify-center px-4 py-8">
-        <form onSubmit={handleSubmit} className="bg-black bg-opacity-80 p-8 rounded-md w-full max-w-md border border-gray-800">
-          <h1 className="text-3xl font-bold mb-8">Iniciar sesión</h1>
-          
-          <div className="mb-6">
-            <div className="flex flex-col space-y-1 mb-4">
-              <div className="text-gray-400 text-sm">Correo electrónico:</div>
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className={`w-full p-3 bg-gray-900 border ${
-                  errors.email ? 'border-red-500' : 'border-gray-700'
-                } rounded text-white focus:outline-none focus:ring-1 focus:ring-blue-600`}
-                placeholder="tu@email.com"
-              />
-              {errors.email && (
-                <p className="text-red-500 text-sm mt-1">{errors.email}</p>
-              )}
-            </div>
-            
-            <div className="flex flex-col space-y-1">
-              <div className="text-gray-400 text-sm">Contraseña:</div>
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className={`w-full p-3 bg-gray-900 border ${
-                  errors.password ? 'border-red-500' : 'border-gray-700'
-                } rounded text-white focus:outline-none focus:ring-1 focus:ring-blue-600`}
-                placeholder="**********"
-              />
-              {errors.password && (
-                <p className="text-red-500 text-sm mt-1">{errors.password}</p>
-              )}
-            </div>
+      <main className="flex-grow flex items-start justify-center px-4 pt-32 md:pt-40 pb-12">
+        <form
+          onSubmit={handleSubmit}
+          className="w-full max-w-md bg-gray-900 bg-opacity-95 rounded-xl p-8 shadow-lg border border-gray-800"
+        >
+          {/* Icono */}
+          <div className="flex justify-center mb-4">
+            <FingerPrintIcon className="w-12 h-12 text-blue-400" />
           </div>
-          
-          <button 
-            type="submit" 
-            className="w-full bg-blue-500 hover:bg-blue-700 py-3 rounded font-bold text-lg transition duration-200 mb-6"
+
+          <h1 className="text-3xl font-bold text-center mb-8">Iniciar sesión</h1>
+
+          {/* Campo email */}
+          <div className="mb-6">
+            <label className="block text-sm text-gray-400 mb-1">Correo electrónico</label>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className={`w-full px-4 py-3 bg-gray-800 border ${
+                errors.email ? 'border-red-500' : 'border-gray-700'
+              } rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-600`}
+              placeholder="tu@email.com"
+            />
+            {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
+          </div>
+
+          {/* Campo password */}
+          <div className="mb-6">
+            <label className="block text-sm text-gray-400 mb-1">Contraseña</label>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className={`w-full px-4 py-3 bg-gray-800 border ${
+                errors.password ? 'border-red-500' : 'border-gray-700'
+              } rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-600`}
+              placeholder="**********"
+            />
+            {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password}</p>}
+          </div>
+
+          {/* Botón login */}
+          <button
+            type="submit"
+            className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 py-3 rounded-xl font-semibold text-lg tracking-wide transition-all transform hover:scale-105 shadow-lg mb-6 cursor-pointer flex items-center justify-center"
           >
             Iniciar sesión
           </button>
-          
-          <div className="flex justify-between items-center mb-8">
-            <div className="text-gray-400">
-              <div className="flex items-center">
-                <input type="checkbox" className="mr-2 accent-blue-600" />
-                <span>Recuérdame</span>
-              </div>
-            </div>
-            <a href="#" className="text-gray-300 hover:underline text-sm">
-              ¿Necesitas ayuda?
-            </a>
+
+          {/* Recordarme y ayuda */}
+          <div className="flex justify-between items-center text-sm text-gray-400 mb-8">
+            <label className="flex items-center space-x-2">
+              <input type="checkbox" className="accent-blue-600 cursor-pointer" />
+              <span>Recuérdame</span>
+            </label>
+            <a href="#" className="hover:underline">¿Necesitas ayuda?</a>
           </div>
-          
-          <div className="text-center mb-8">
-            <div className="text-gray-500 text-lg mb-1">
-              ¿Primera vez en FilmPeak? 
-              <a href="#" className="text-white hover:underline ml-1">Suscríbete ya.</a>
-            </div>
-            <div className="text-xs text-gray-600">
-              Este sitio está protegido por Google reCAPTCHA para comprobar que no eres un robot.
-            </div>
+
+          {/* Suscripción */}
+          <div className="text-center mb-6 text-gray-400 text-sm">
+            ¿Primera vez en FilmPeak? 
+            <button
+              type="button"
+              onClick={handleStartSubscription}
+              className="text-white hover:underline ml-1 cursor-pointer"
+            >
+              Suscríbete ya.
+            </button>
           </div>
+
+          {/* Recaptcha */}
+          <p className="text-xs text-gray-500 text-center">
+            Este sitio está protegido por Google reCAPTCHA para comprobar que no eres un robot.
+          </p>
         </form>
       </main>
 
       {/* Footer */}
-      <footer className="bg-black bg-opacity-90 px-4 md:px-16 py-6 text-gray-400 text-sm">
-        <div className="max-w-6xl mx-auto">
-          <div className="mb-6">
-            <div className="text-gray-500 mb-4">¿Preguntas? Llama al 01 800 917 1564</div>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
-              <a href="#" className="hover:underline">Preguntas frecuentes</a>
-              <a href="#" className="hover:underline">Centro de ayuda</a>
-              <a href="#" className="hover:underline">Términos de uso</a>
-              <a href="#" className="hover:underline">Privacidad</a>
-              <a href="#" className="hover:underline">Preferencias de cookies</a>
-              <a href="#" className="hover:underline">Información corporativa</a>
-            </div>
-          </div>
-          <div className="border-t border-gray-800 pt-4 text-center">
-            © 2025 FilmPeak, Inc.
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 };

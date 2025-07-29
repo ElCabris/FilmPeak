@@ -131,7 +131,7 @@ const PlanOptionsPage: React.FC = () => {
 
         <button
           onClick={handleNext}
-          className="mt-14 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 px-10 py-4 rounded-lg text-lg font-bold transition-all transform hover:scale-105 shadow-lg"
+          className="mt-14 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 px-10 py-4 rounded-lg text-lg font-bold transition-all transform hover:scale-105 shadow-lg cursor-pointer flex items-center justify-center"
         >
           Continuar
         </button>
