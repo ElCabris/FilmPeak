@@ -59,7 +59,7 @@ class MovieBase(BaseModel):
         None, max_length=2000, example="Un ladrón que roba secretos corporativos..."
     )
     duration_minutes: Optional[int] = Field(
-        None, ge=1, le=300, example=148, description="movie length in minutes"
+        None, ge=0, le=300, example=148, description="movie length in minutes"
     )
     score: Optional[float] = Field(
         ..., ge=0, le=5, example=4.7, description="Movie rating score from 0 to 10"
