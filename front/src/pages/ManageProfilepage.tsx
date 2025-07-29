@@ -1,9 +1,9 @@
 import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { PencilIcon } from '@heroicons/react/24/outline';
-import mateoImage from '../../assets/BoyIcon.webp';
-import andreImage from '../../assets/BoyIcon.webp';
-import alejandraImage from '../../assets/GirlIcon.webp';
+import mateoImage from '../assets/BoyIcon.webp';
+import andreImage from '../assets/BoyIcon.webp';
+import alejandraImage from '../assets/GirlIcon.webp';
 
 interface Profile {
   name: string;
