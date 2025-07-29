@@ -23,10 +23,9 @@ const ManageProfilesScreen = () => {
   ]);
 
   const handleProfileClick = (profile: Profile) => {
-    // Guardar el perfil seleccionado en localStorage
-    localStorage.setItem('selectedProfile', JSON.stringify(profile));
-    // Redirigir a la página de edición
-    navigate('/EditProfile', { state: { profile } });
+    // Codificar el nombre para URL
+    const encodedName = encodeURIComponent(profile.name);
+    navigate(`/settings-profiles/${encodedName}`, { state: { profile } });
   };
 
   const handleDone = () => {
@@ -47,14 +46,12 @@ const ManageProfilesScreen = () => {
             onClick={() => handleProfileClick(profile)}
           >
             <div className="relative w-48 h-48 rounded-full mb-4 overflow-hidden">
-              {/* Avatar normal */}
               <img 
                 src={profile.avatar} 
                 alt={`Perfil de ${profile.name}`} 
                 className="w-full h-full object-cover"
               />
               
-              {/* Icono de lápiz centrado con fondo circular */}
               <div className="absolute inset-0 flex items-center justify-center">
                 <div className="bg-blue-600 p-3 rounded-full border-4 border-white shadow-lg">
                   <PencilIcon className="w-10 h-10 text-white" />
