@@ -46,7 +46,7 @@ const ProfileSelectionScreen = () => {
   };
 
   const handleManageProfiles = () => {
-    navigate('/administrar-perfiles');
+    navigate('/admin-profiles');
   };
 
   return (
