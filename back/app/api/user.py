@@ -70,3 +70,4 @@ def login(user: UserLogin):
     except Exception as e:
         logger.error(f"Login error: {str(e)}")
         raise HTTPException(status_code=500, detail="Internal server error")
+    
