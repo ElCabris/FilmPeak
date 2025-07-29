@@ -37,7 +37,7 @@ async def register_user(user: UserRegister):
 @router.get("/user/profiles/{email}", response_model=UserProfiles)
 async def get_user_profiles(email: str):
     profiles = get_profiles_by_email(email)
-    print(profiles)
+    logger.info(profiles)
     return create_user_profile_response(email, profiles)
 
 

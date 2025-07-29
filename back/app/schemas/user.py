@@ -1,4 +1,5 @@
 from pydantic import Base64Bytes, BaseModel, EmailStr
+from typing import Optional
 
 
 class UserRegister(BaseModel):
@@ -23,10 +24,13 @@ class TokenResponse(BaseModel):
     token_type: str = "bearer"
 
 
+class Profile(BaseModel):
+    profile_name: str
+    image: Optional[str]
+
 class UserProfiles(BaseModel):
     email: EmailStr
-    profiles: list[str]
-
+    profiles: list[Profile]
 
 class ProfileCreateRequest(BaseModel):
     email: EmailStr
