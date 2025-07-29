@@ -65,25 +65,10 @@ const EditProfilePage = () => {
         },
         body: JSON.stringify({
           email: userEmail,
-          profile_name: name.trim()
+          profile_name: name.trim(),
+          image: selectedAvatar // ahora se envía la imagen correctamente
         })
       });
-
-      if (!response.ok) {
-        const errorText = await response.text();
-        console.error('Error al crear el perfil:', response.status, errorText);
-        setError('No se pudo crear el perfil. Intenta nuevamente.');
-        return;
-      }
-
-      // Si fue exitoso, continuar
-      const newProfile = {
-        name: name.trim(),
-        avatar: selectedAvatar,
-        isKidsProfile
-      };
-
-      navigate('/profiles', { state: { newProfile } });
 
     } catch (err) {
       console.error('Error de red:', err);
@@ -210,8 +195,8 @@ const EditProfilePage = () => {
                 <div
                   key={avatar.id}
                   className={`p-4 rounded-lg cursor-pointer flex items-center justify-center transition-all ${selectedAvatar === avatar.image
-                      ? 'bg-blue-400 scale-105 border-2 border-white'
-                      : 'bg-gray-700 hover:bg-gray-600 border-2 border-transparent'
+                    ? 'bg-blue-400 scale-105 border-2 border-white'
+                    : 'bg-gray-700 hover:bg-gray-600 border-2 border-transparent'
                     }`}
                   onClick={() => handleAvatarSelect(avatar.image)}
                 >

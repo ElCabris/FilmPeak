@@ -67,7 +67,8 @@ async def point_delete_profile(email: str, profile: str):
 @router.post("/user/profiles/create")
 async def create_profile(data: ProfileCreateRequest):
     try:
-        created = create_user_profile(data.email, data.profile_name)
+        logger.info(data)
+        created = create_user_profile(data.email, data.profile_name, data.image)
         return {"message": "Profile created successfully"}
     except ValueError as e:
         raise HTTPException(status_code=404, detail=str(e))

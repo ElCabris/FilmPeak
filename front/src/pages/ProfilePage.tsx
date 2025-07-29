@@ -28,7 +28,7 @@ const ProfileSelectionScreen = () => {
 
       if (!userEmail) {
         console.error('Email de usuario no encontrado');
-        navigate('/login'); // Redirige si no está autenticado
+        navigate('/login');
         return;
       }
 
@@ -45,16 +45,12 @@ const ProfileSelectionScreen = () => {
         const data = await response.json();
         const fetchedProfiles = data.profiles;
 
-        const avatarMap: Record<string, string> = {
-          'Mateo': mateoImage,
-          'Andre': andreImage,
-          'Alejandra': alejandraImage,
-        };
+        const defaultAvatar = mateoImage; // Imagen por defecto si no hay imagen
 
-        const updatedProfiles: Profile[] = fetchedProfiles.map((name: string) => ({
-          name,
-          avatar: avatarMap[name] || mateoImage, // avatar por defecto si no hay coincidencia
-          isKidsProfile: false, // puedes ajustar esto si tu backend lo incluye
+        const updatedProfiles: Profile[] = fetchedProfiles.map((p: any) => ({
+          name: p.profile_name,
+          avatar: p.image ?? defaultAvatar,
+          isKidsProfile: false,
         }));
 
         setProfiles(updatedProfiles);
