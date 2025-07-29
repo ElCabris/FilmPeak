@@ -35,3 +35,4 @@ class UserProfiles(BaseModel):
 class ProfileCreateRequest(BaseModel):
     email: EmailStr
     profile_name: str
+    image: str
