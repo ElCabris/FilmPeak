@@ -11,7 +11,7 @@ const SelectPlanPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white flex flex-col">
+    <div className="min-h-screen bg-gradient-to-b from-black/100 via-black/92 to-black/90 text-white flex flex-col">
       <NavbarSignupSecond />
 
       <main className="flex-grow flex flex-col items-center justify-center px-4 py-12 mt-20">
