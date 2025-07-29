@@ -37,7 +37,7 @@ def get_profiles_by_email(email: str) -> list[dict[str, Any]]:
         logger.info(f"serch profiles with email {email}")
         cursor.execute(
             """
-                SELECT profile FROM profiles 
+                SELECT profile, image FROM profiles 
                 WHERE user_id = (
                     SELECT id FROM users WHERE email = ?
                 )
