@@ -7,6 +7,7 @@ interface ContentItem {
   description: string;
   rating: number;
   featured?: boolean;
+  onClick?: () => void;  // Nueva prop para manejar clics
 }
 
 interface ContentSectionProps {
@@ -25,7 +26,8 @@ const ContentSection: React.FC<ContentSectionProps> = ({ title, subtitle, items 
         {items.map((item) => (
           <div 
             key={item.id}
-            className={`bg-gray-800 rounded-lg overflow-hidden transition-transform hover:scale-105 ${item.featured ? 'md:col-span-2' : ''}`}
+            className={`bg-gray-800 rounded-lg overflow-hidden transition-transform hover:scale-105 ${item.featured ? 'md:col-span-2' : ''} cursor-pointer`}
+            onClick={item.onClick}  // Manejar el clic aquí
           >
             {/* Placeholder para la imagen */}
             <div className={`${item.featured ? 'h-64' : 'h-48'} bg-gradient-to-r from-purple-900 to-blue-800 relative`}>

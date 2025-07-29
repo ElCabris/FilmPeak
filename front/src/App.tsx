@@ -12,6 +12,7 @@ import PlanOptionsPage from './pages/signup/SelectPlanForm';
 import PaymentPicker from './pages/signup/PaymentPicker';
 import GiftOption from './pages/signup/PaymentOption/GiftOption';
 import CreditOption from './pages/signup/PaymentOption/CreditOption';
+import WatchPage from './pages/WatchPage';
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
       <Route path="/login" element={<LoginPage />} />
       <Route path="/profiles" element={<ProfilePage />} />
       <Route path="/EditProfile" element={<EditProfile />} />
+      <Route path="/watch/:id" element={<WatchPage />} />
       <Route path="/admin-profiles" element={<AdminProfiles />} />
       <Route path="/settings-profiles/:profilename" element={<SettingsProfiles />} />
       <Route path='/SelectMovie' element={<SelectMoviePage />} />
