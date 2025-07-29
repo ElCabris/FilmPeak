@@ -14,22 +14,22 @@ import {
 const PaymentMethodPage: React.FC = () => {
   const navigate = useNavigate();
 
-const handleSelect = (method: string) => {
-  localStorage.setItem('paymentMethod', method);
-  if (method === 'card') {
-    navigate('/payment/card');
-  } else if (method === 'gift') {
-    navigate('/payment/gift');
-  }
-};
+  const handleSelect = (method: string) => {
+    localStorage.setItem('paymentMethod', method);
+    if (method === 'card') {
+      navigate('/payment/card');
+    } else if (method === 'gift') {
+      navigate('/payment/gift');
+    }
+  };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-black via-zinc-900 to-black text-white flex flex-col">
+    <div className="min-h-screen bg-gradient-to-b from-black/100 via-black/92 to-black/90 text-white flex flex-col">
       <NavbarSignup />
 
       <main className="flex-grow px-6 py-16 mt-32 flex flex-col items-center">
         {/* Ícono grande y centrado */}
-        <div className="flex flex-col items-center gap-2 text-red-500 mb-6">
+        <div className="flex flex-col items-center gap-2 text-blue-500 mb-6">
           <LockClosedIcon className="w-10 h-10" />
         </div>
 
@@ -43,29 +43,29 @@ const handleSelect = (method: string) => {
         </p>
 
         {/* Opciones de pago */}
-        <div className="w-full max-w-xl space-y-5 text-black">
+        <div className="w-full max-w-xl space-y-5">
           {/* Tarjeta */}
           <button
             onClick={() => handleSelect('card')}
-            className="w-full flex justify-between items-center bg-white rounded-lg px-6 py-5 hover:shadow-lg transform hover:scale-105 transition duration-300 ease-in-out"
+            className="w-full flex justify-between items-center bg-gray-800 rounded-lg px-6 py-5 hover:bg-gray-700 transform hover:scale-105 transition duration-300 ease-in-out cursor-pointer"
           >
             <div className="flex items-center gap-3">
-              <CreditCardIcon className="w-6 h-6 text-blue-600" />
-              <span className="font-semibold text-black">Tarjeta de crédito o débito</span>
+              <CreditCardIcon className="w-6 h-6 text-blue-400" />
+              <span className="font-semibold text-white">Tarjeta de crédito o débito</span>
             </div>
-            <ChevronRightIcon className="w-5 h-5 text-gray-500" />
+            <ChevronRightIcon className="w-5 h-5 text-gray-300" />
           </button>
 
           {/* Código de regalo */}
           <button
             onClick={() => handleSelect('gift')}
-            className="w-full flex justify-between items-center bg-white rounded-lg px-6 py-5 hover:shadow-lg transform hover:scale-105 transition duration-300 ease-in-out"
+            className="w-full flex justify-between items-center bg-gray-800 rounded-lg px-6 py-5 hover:bg-gray-700 transform hover:scale-105 transition duration-300 ease-in-out cursor-pointer"
           >
             <div className="flex items-center gap-3">
-              <GiftIcon className="w-6 h-6 text-red-500" />
-              <span className="font-semibold text-black">Código de regalo</span>
+              <GiftIcon className="w-6 h-6 text-red-400" />
+              <span className="font-semibold text-white">Código de regalo</span>
             </div>
-            <ChevronRightIcon className="w-5 h-5 text-gray-500" />
+            <ChevronRightIcon className="w-5 h-5 text-gray-300" />
           </button>
         </div>
 
