@@ -67,7 +67,7 @@ const HomePage: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4">
           <ContentSection 
             title="Planes a largo plazo" 
-            subtitle="Continuar viendo contenido de Andre"
+            subtitle="Continuar viendo contenido"
             items={longTermPlans}
           />
           
