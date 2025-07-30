@@ -11,22 +11,20 @@ const Notification: React.FC<NotificationProps> = ({
   message, 
   type = 'success', 
   onClose, 
-  duration = 3000 
+  duration = 5000 
 }) => {
   const [visible, setVisible] = useState(false);
 
- // Efecto para mostrar/ocultar la notificación
   useEffect(() => {
     setVisible(true);
     const timer = setTimeout(() => {
       setVisible(false);
-      setTimeout(onClose, 300); 
+      setTimeout(onClose, 300);
     }, duration);
 
     return () => clearTimeout(timer);
   }, [onClose, duration]);
 
-// Colores según el resultado
   const typeColors = {
     success: 'bg-gradient-to-r from-green-600 to-emerald-700',
     error: 'bg-gradient-to-r from-red-600 to-rose-700',
