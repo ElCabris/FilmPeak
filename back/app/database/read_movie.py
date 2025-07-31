@@ -50,7 +50,8 @@ def read_movie(movie_id: int) -> Optional[Dict[str, Any]]:
             if result is None:
                 return None
 
-            return dict(result)
+            result = dict(result)
+            return result
 
     except sqlite3.Error as e:
         raise sqlite3.Error(f"Error reading movie with ID {movie_id}: {e}")

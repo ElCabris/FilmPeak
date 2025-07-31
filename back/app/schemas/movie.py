@@ -73,11 +73,26 @@ class MovieBase(BaseModel):
     )
 
 
-class MovieCreate(BaseModel):
+class MovieResponse(MovieBase):
+    image: Optional[str] = Field(
+        None,
+        example="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQE...",
+        description="Base64-encoded image with data URI (e.g., data:image/jpeg;base64,...)",
+        min_length=30,
+    )
+
+
+class MovieCreate(MovieBase):
     """Template to create a new movie, including the file path."""
 
     file_path: Path = Field(
         ...,
         example="./movies/inception.mp4",
         description="Absolute or relative path to the movie file",
+    )
+
+    image_path: Optional[Path] = Field(
+        ...,
+        example="./movies/images/hi.jpg",
+        description="Absolute or relative path to the movie image",
     )

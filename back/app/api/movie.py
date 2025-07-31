@@ -1,8 +1,10 @@
 from fastapi import APIRouter, Request, HTTPException
 from fastapi.responses import StreamingResponse, Response
 from app.schemas.movie import MovieBase
-from app.services.get_movie import get_movie_path, create_movie_base
+from app.services.get_movie import get_movie_path, create_movie_response
 from app.database.read_movie import get_all_movies as read_all_movies
+from typing import List
+from app.schemas.movie import MovieResponse
 
 router = APIRouter()
 
@@ -76,11 +78,11 @@ async def watch_movie(movie_id: int, request: Request):
         )
 
 
-@router.get("/movie/getall")
+@router.get("/movie/getall", response_model=List[MovieResponse])
 def get_all_movies():
     movies = read_all_movies()
     results = []
     for movie in movies:
-        results.append(create_movie_base(movie))
+        results.append(create_movie_response(movie))
 
     return results
