@@ -34,7 +34,7 @@ const CardPaymentPage: React.FC = () => {
     // Redirigir después de 5 segundos
     setTimeout(() => {
       navigate('/SelectMovie');
-    }, 5000);
+    }, 1500);
   };
 
   const handleChangePlan = () => {
@@ -48,7 +48,7 @@ const CardPaymentPage: React.FC = () => {
       {/* Notificación */}
       {showNotification && (
         <Notification
-          message="¡Membresía iniciada con éxito!"
+          message="¡Pago realizado con éxito!"
           type="success"
           onClose={() => setShowNotification(false)}
           duration={5000}

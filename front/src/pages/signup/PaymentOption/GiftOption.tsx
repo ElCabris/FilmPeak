@@ -17,7 +17,7 @@ const GiftCodePage: React.FC = () => {
     // Redirigir después de 5 segundos
     setTimeout(() => {
       navigate('/SelectMovie');
-    }, 5000);
+    }, 1100);
   };
 
   const handleChangePlan = () => {

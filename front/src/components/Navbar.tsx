@@ -4,16 +4,16 @@ import logo from '../assets/logo.webp';
 import ConfirmationModal from './ConfirmationModal';
 
 const Navbar: React.FC = () => {
-  const profileName = sessionStorage.getItem('selectedProfileName') || 'Usuario';
+  const storedProfileName = sessionStorage.getItem('selectedProfileName');
+  const profileName = storedProfileName && storedProfileName !== "null" ? storedProfileName : 'Perfil';
   const initial = profileName.charAt(0).toUpperCase();
+
   const [isDropdownOpen, setDropdownOpen] = useState(false);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
 
-  const toggleDropdown = () => {
-    setDropdownOpen(!isDropdownOpen);
-  };
+  const toggleDropdown = () => setDropdownOpen(!isDropdownOpen);
 
   const handleClickOutside = (event: MouseEvent) => {
     if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
@@ -38,24 +38,16 @@ const Navbar: React.FC = () => {
   };
 
   return (
-    <nav className="fixed top-0 w-full bg-gradient-to-b from-black to-transparent z-50 px-4 py-3">
+    <nav className="fixed top-0 w-full left-0 bg-gradient-to-b from-black/90 via-black/80 to-black/50 z-50 px-2 py-3">
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         <div className="flex items-center">
-          <Link to="/" className="mr-10">
-            <img src={logo} alt="FilmPeak Logo" className="h-20 object-contain" />
+          <Link to="/" className="mr-6">
+            <img 
+              src={logo} 
+              alt="FilmPeak Logo" 
+              className="h-20 md:h-24 object-contain"
+            />
           </Link>
-
-          <div className="hidden md:flex space-x-8">
-            {['Inicio', 'Clasicos', 'Categorias', 'Novedades populares', 'Explora por idiomas'].map((item) => (
-              <Link
-                key={item}
-                to="#"
-                className="text-gray-300 hover:text-white transition-colors text-sm"
-              >
-                {item}
-              </Link>
-            ))}
-          </div>
         </div>
 
         {/* Dropdown perfil */}
@@ -69,7 +61,7 @@ const Navbar: React.FC = () => {
           </div>
 
           {isDropdownOpen && (
-            <div className="absolute right-0 mt-2 w-48 bg-gray-800 text-white rounded-lg shadow-lg z-50">
+            <div className="absolute right-0 mt-2 w-52 bg-gray-800 text-white rounded-lg shadow-lg z-50">
               <div className="px-4 py-3 text-sm border-b border-gray-700">
                 Perfil: <strong>{profileName}</strong>
               </div>
@@ -85,7 +77,7 @@ const Navbar: React.FC = () => {
               <button
                 onClick={() => {
                   setDropdownOpen(false);
-                  setShowLogoutModal(true); // Mostrar modal
+                  setShowLogoutModal(true);
                 }}
                 className="w-full text-left px-4 py-2 hover:bg-gray-700 text-sm text-red-400"
               >

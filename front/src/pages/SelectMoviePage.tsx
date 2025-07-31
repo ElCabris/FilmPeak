@@ -63,11 +63,11 @@ const HomePage: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-900 text-white">
       <Navbar />
-      <main className="pt-20 pb-10">
+      <main className="pt-35 pb-10">
         <div className="max-w-7xl mx-auto px-4">
           <ContentSection 
             title="Planes a largo plazo" 
-            subtitle="Continuar viendo contenido de Andre"
+            subtitle="Continuar viendo contenido"
             items={longTermPlans}
           />
           
