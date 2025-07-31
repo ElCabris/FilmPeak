@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation, useParams } from 'react-router-dom';
-import { ChevronLeftIcon, TrashIcon } from '@heroicons/react/24/outline';
+import { ArrowLeftIcon, CogIcon, UserIcon, TrashIcon, BellIcon } from '@heroicons/react/24/outline';
 
 interface Profile {
-  id?: string;
+  id: string;
   name: string;
   avatar: string;
   isKidsProfile: boolean;
@@ -16,188 +16,89 @@ const ProfileSettingsPage = () => {
   const [activeTab, setActiveTab] = useState('profile');
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const [currentProfile, setCurrentProfile] = useState<Profile | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState('');
   
+  // Simulación de base de datos de perfiles
+  const mockProfiles: Profile[] = [
+    { id: '1', name: 'Mateo', avatar: '', isKidsProfile: false },
+    { id: '2', name: 'Andre', avatar: '', isKidsProfile: false },
+    { id: '3', name: 'Alejandra', avatar: '', isKidsProfile: false }
+  ];
+
   useEffect(() => {
-    const fetchProfiles = async () => {
-      const userEmail = localStorage.getItem('userEmail') || sessionStorage.getItem('userEmail');
-      
-      if (!userEmail) {
-        console.error('Email de usuario no encontrado');
-        navigate('/login');
-        return;
-      }
-
-      const decodedProfileName = profileName ? decodeURIComponent(profileName) : '';
-      
-      try {
-        setIsLoading(true);
-        const response = await fetch(`http://127.0.0.1:8000/user/profiles/${userEmail}`);
-
-        if (!response.ok) {
-          const errorText = await response.text();
-          console.error(`Error al obtener perfiles: ${response.status} - ${errorText}`);
-          setError('No se pudieron cargar los perfiles');
-          return;
-        }
-
-        const data = await response.json();
-        const fetchedProfiles = data.profiles;
-
-        // Buscar el perfil específico por nombre
-        const foundProfile = fetchedProfiles.find((p: any) => p.profile_name === decodedProfileName);
-        
-        if (foundProfile) {
-          setCurrentProfile({
-            name: foundProfile.profile_name,
-            avatar: foundProfile.image || '',
-            isKidsProfile: false // Por ahora hardcodeado, se puede extender después
-          });
-        } else if (location.state?.profile) {
-          // Si viene del estado de navegación
-          setCurrentProfile(location.state.profile);
-        } else {
-          // Si no se encuentra, redirigir
-          setError('Perfil no encontrado');
-          navigate('/profiles');
-        }
-      } catch (error) {
-        console.error('Error al conectar con el servidor:', error);
-        setError('Ocurrió un error al cargar el perfil.');
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchProfiles();
+    // Decodificar el nombre del perfil de la URL
+    const decodedProfileName = profileName ? decodeURIComponent(profileName) : '';
+    
+    // Buscar el perfil por nombre
+    const foundProfile = mockProfiles.find(profile => profile.name === decodedProfileName);
+    
+    if (foundProfile) {
+      setCurrentProfile(foundProfile);
+    } else if (location.state?.profile) {
+      // Si viene del estado de navegación
+      setCurrentProfile(location.state.profile);
+    } else {
+      // Si no se encuentra, redirigir
+      navigate('/admin-profiles');
+    }
   }, [profileName, location.state, navigate]);
 
   const handleBack = () => {
     navigate(-1);
   };
 
-  const handleSaveChanges = async () => {
-    if (!currentProfile) return;
-    
-    // Por ahora solo guardamos localmente, se puede extender para enviar al backend
-    console.log('Cambios guardados para:', currentProfile.name);
-    navigate('/profiles');
+  const handleSaveChanges = () => {
+    // Lógica para guardar cambios en el perfil
+    console.log('Cambios guardados para:', currentProfile?.name);
+    navigate('/profile-selection');
   };
 
-  const handleDeleteProfile = async () => {
-    if (!currentProfile) return;
-
-    const userEmail = localStorage.getItem('userEmail') || sessionStorage.getItem('userEmail');
-    
-    if (!userEmail) {
-      setError('No se encontró el correo del usuario');
-      return;
-    }
-
-    try {
-      const response = await fetch(`http://127.0.0.1:8000/user/profiles?email=${encodeURIComponent(userEmail)}&profile=${encodeURIComponent(currentProfile.name)}`, {
-        method: 'DELETE',
-      });
-
-      if (!response.ok) {
-        const errorText = await response.text();
-        console.error(`Error al eliminar perfil: ${response.status} - ${errorText}`);
-        setError('No se pudo eliminar el perfil');
-        return;
-      }
-
-      const result = await response.json();
-      console.log('Perfil eliminado:', result.message);
-      
-      // Redirigir a la página de perfiles después de eliminar
-      navigate('/profiles');
-    } catch (error) {
-      console.error('Error en la conexión:', error);
-      setError('Ocurrió un error al intentar eliminar el perfil');
-    }
+  const handleDeleteProfile = () => {
+    // Lógica para eliminar el perfil
+    console.log('Perfil eliminado:', currentProfile?.name);
+    navigate('/profile-selection');
   };
-
-  if (isLoading) {
-    return (
-      <div className="min-h-screen bg-gradient-to-b from-black/100 via-black/92 to-black/90 text-white flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-pulse text-lg">Cargando perfil...</div>
-        </div>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="min-h-screen bg-gradient-to-b from-black/100 via-black/92 to-black/90 text-white flex items-center justify-center">
-        <div className="text-center">
-          <div className="text-red-500 text-lg mb-4">{error}</div>
-          <button 
-            onClick={() => navigate('/profiles')}
-            className="bg-blue-600 hover:bg-blue-700 px-6 py-2 rounded-lg transition-colors"
-          >
-            Volver a perfiles
-          </button>
-        </div>
-      </div>
-    );
-  }
 
   if (!currentProfile) {
     return (
       <div className="min-h-screen bg-gradient-to-b from-black/100 via-black/92 to-black/90 text-white flex items-center justify-center">
-        <div className="text-center">
-          <div className="text-lg mb-4">Perfil no encontrado</div>
-          <button 
-            onClick={() => navigate('/profiles')}
-            className="bg-blue-600 hover:bg-blue-700 px-6 py-2 rounded-lg transition-colors"
-          >
-            Volver a perfiles
-          </button>
-        </div>
+        Cargando perfil...
       </div>
     );
   }
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-black/100 via-black/92 to-black/90 text-white">
-      {/* Header */}
-      <div className="flex items-center p-6 border-b border-gray-800">
+      <main className="max-w-4xl mx-auto px-4 py-8">
+        {/* Botón de volver */}
         <button 
           onClick={handleBack}
-          className="mr-4 p-2 hover:bg-gray-800 rounded-full transition-colors"
+          className="flex items-center text-gray-400 hover:text-white transition-colors mb-8"
         >
-          <ChevronLeftIcon className="w-6 h-6" />
+          <ArrowLeftIcon className="w-5 h-5 mr-2" />
+          Volver
         </button>
-        <h1 className="text-2xl font-bold">Editar perfil</h1>
-      </div>
-
-      <div className="max-w-4xl mx-auto p-6">
-        {/* Navegación de pestañas */}
+        
+        <h1 className="text-3xl font-bold mb-8">
+          Administrar perfil: {currentProfile.name}
+        </h1>
+        
+        {/* Tabs */}
         <div className="flex border-b border-gray-700 mb-8">
           <button
+            className={`px-6 py-3 font-medium ${activeTab === 'profile' ? 'text-white border-b-2 border-blue-500' : 'text-gray-400 hover:text-white'}`}
             onClick={() => setActiveTab('profile')}
-            className={`px-6 py-3 font-medium transition-colors ${
-              activeTab === 'profile' 
-                ? 'text-white border-b-2 border-blue-600' 
-                : 'text-gray-400 hover:text-white'
-            }`}
           >
+            <UserIcon className="w-5 h-5 inline-block mr-2" />
             Perfil
           </button>
           <button
-            onClick={() => setActiveTab('parental')}
-            className={`px-6 py-3 font-medium transition-colors ${
-              activeTab === 'parental' 
-                ? 'text-white border-b-2 border-blue-600' 
-                : 'text-gray-400 hover:text-white'
-            }`}
+            className={`px-6 py-3 font-medium ${activeTab === 'preferences' ? 'text-white border-b-2 border-blue-500' : 'text-gray-400 hover:text-white'}`}
+            onClick={() => setActiveTab('preferences')}
           >
-            Control parental
+            <CogIcon className="w-5 h-5 inline-block mr-2" />
+            Preferencias
           </button>
         </div>
-
         
         {/* Contenido de pestaña de Perfil */}
         {activeTab === 'profile' && (
@@ -242,150 +143,176 @@ const ProfileSettingsPage = () => {
             
             {/* Avatar */}
             <div className="bg-gray-900 bg-opacity-50 rounded-xl p-6 border border-gray-700">
-              <h2 className="text-xl font-semibold mb-6">Avatar del perfil</h2>
+              <h2 className="text-xl font-semibold mb-6">Imagen del perfil</h2>
               
-              <div className="flex items-center space-x-6">
-                <div className="w-20 h-20 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-2xl font-bold">
+              <div className="flex flex-col md:flex-row items-center gap-8">
+                <div className="w-32 h-32 rounded-full bg-gray-800 flex items-center justify-center overflow-hidden">
                   {currentProfile.avatar ? (
-                    <img src={currentProfile.avatar} alt="Avatar" className="w-full h-full rounded-full object-cover" />
+                    <img 
+                      src={currentProfile.avatar} 
+                      alt={`Avatar de ${currentProfile.name}`} 
+                      className="w-full h-full object-cover"
+                    />
                   ) : (
-                    currentProfile.name.charAt(0).toUpperCase()
+                    <div className="text-4xl font-bold text-white">
+                      {currentProfile.name.charAt(0)}
+                    </div>
                   )}
                 </div>
                 
                 <div className="flex-1">
-                  <h3 className="text-lg font-medium mb-2">{currentProfile.name}</h3>
-                  <button className="bg-gray-700 hover:bg-gray-600 py-2 px-4 rounded-lg transition-colors">
-                    Cambiar avatar
-                  </button>
+                  <p className="text-gray-400 mb-4">
+                    Personaliza tu perfil con una imagen única. Formatos recomendados: JPG o PNG (máx. 5MB)
+                  </p>
+                  
+                  <div className="flex gap-4">
+                    <button className="bg-blue-600 hover:bg-blue-700 py-3 px-6 rounded-lg transition-colors">
+                      Subir imagen
+                    </button>
+                    <button className="bg-gray-800 hover:bg-gray-700 py-3 px-6 rounded-lg transition-colors">
+                      Elegir de la galería
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
-
-            {/* Configuraciones adicionales */}
+            
+            {/* Acciones peligrosas */}
             <div className="bg-gray-900 bg-opacity-50 rounded-xl p-6 border border-gray-700">
-              <h2 className="text-xl font-semibold mb-6">Configuraciones adicionales</h2>
+              <h2 className="text-xl font-semibold mb-6">Acciones de perfil</h2>
               
               <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <h3 className="font-medium">Perfil para niños</h3>
-                    <p className="text-gray-400 text-sm">Mostrar solo contenido apropiado para menores</p>
-                  </div>
-                  <div
-                    onClick={() => setCurrentProfile({
-                      ...currentProfile,
-                      isKidsProfile: !currentProfile.isKidsProfile
-                    })}
-                    className={`w-14 h-7 flex items-center rounded-full p-1 cursor-pointer transition-colors ${
-                      currentProfile.isKidsProfile ? 'bg-blue-600' : 'bg-gray-600'
-                    }`}
-                  >
-                    <div
-                      className={`bg-white w-5 h-5 rounded-full shadow-md transform transition-transform ${
-                        currentProfile.isKidsProfile ? 'translate-x-7' : ''
-                      }`}
-                    ></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Zona de peligro */}
-            <div className="bg-red-900 bg-opacity-20 rounded-xl p-6 border border-red-800">
-              <h2 className="text-xl font-semibold mb-6 text-red-400">Zona de peligro</h2>
-              
-              <div className="flex items-center justify-between">
-                <div>
-                  <h3 className="font-medium text-red-400">Eliminar perfil</h3>
-                  <p className="text-gray-400 text-sm">Esta acción no se puede deshacer</p>
-                </div>
                 <button 
+                  className="w-full flex items-center justify-between p-4 bg-gray-800 hover:bg-gray-750 rounded-lg transition-colors"
                   onClick={() => setShowDeleteConfirmation(true)}
-                  className="bg-red-600 hover:bg-red-700 py-2 px-4 rounded-lg transition-colors flex items-center space-x-2"
                 >
-                  <TrashIcon className="w-4 h-4" />
-                  <span>Eliminar</span>
+                  <div className="flex items-center">
+                    <TrashIcon className="w-6 h-6 text-red-500 mr-3" />
+                    <span>Eliminar perfil</span>
+                  </div>
+                  <span className="text-gray-400 text-sm">Este perfil se eliminará permanentemente</span>
                 </button>
               </div>
             </div>
           </div>
         )}
-
-        {/* Contenido de pestaña de Control Parental */}
-        {activeTab === 'parental' && (
+        
+        {/* Contenido de pestaña de Preferencias */}
+        {activeTab === 'preferences' && (
           <div className="space-y-8">
+            {/* Preferencias de visualización */}
             <div className="bg-gray-900 bg-opacity-50 rounded-xl p-6 border border-gray-700">
-              <h2 className="text-xl font-semibold mb-6">Control parental</h2>
-              <p className="text-gray-400 mb-6">
-                Configura restricciones de contenido para este perfil
-              </p>
+              <h2 className="text-xl font-semibold mb-6">
+                <CogIcon className="w-6 h-6 inline-block mr-3" />
+                Preferencias de visualización
+              </h2>
               
               <div className="space-y-6">
-                <div className="flex items-center justify-between">
+                <div className="flex items-center justify-between p-4 bg-gray-800 rounded-lg">
                   <div>
-                    <h3 className="font-medium">Contenido para adultos</h3>
-                    <p className="text-gray-400 text-sm">Permitir contenido clasificado para mayores de 18 años</p>
+                    <h3 className="font-medium">Modo oscuro</h3>
+                    <p className="text-gray-400 text-sm">Activar la interfaz oscura</p>
                   </div>
-                  <div className="w-14 h-7 flex items-center bg-gray-600 rounded-full p-1 cursor-pointer">
-                    <div className="bg-white w-5 h-5 rounded-full shadow-md"></div>
-                  </div>
+                  <label className="relative inline-flex items-center cursor-pointer">
+                    <input type="checkbox" className="sr-only peer" defaultChecked />
+                    <div className="w-11 h-6 bg-gray-700 peer-focus:ring-2 peer-focus:ring-blue-600 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                  </label>
                 </div>
                 
-                <div className="flex items-center justify-between">
+                <div className="flex items-center justify-between p-4 bg-gray-800 rounded-lg">
                   <div>
-                    <h3 className="font-medium">Restricción por clasificación</h3>
-                    <p className="text-gray-400 text-sm">Limitar contenido según clasificación de edad</p>
+                    <h3 className="font-medium">Reproducción automática</h3>
+                    <p className="text-gray-400 text-sm">Reproducir siguiente episodio automáticamente</p>
                   </div>
-                  <select className="bg-gray-700 border border-gray-600 rounded-lg px-3 py-2">
-                    <option>Todo público</option>
-                    <option>13+</option>
-                    <option>16+</option>
-                    <option>18+</option>
+                  <label className="relative inline-flex items-center cursor-pointer">
+                    <input type="checkbox" className="sr-only peer" defaultChecked />
+                    <div className="w-11 h-6 bg-gray-700 peer-focus:ring-2 peer-focus:ring-blue-600 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                  </label>
+                </div>
+                
+                <div className="flex items-center justify-between p-4 bg-gray-800 rounded-lg">
+                  <div>
+                    <h3 className="font-medium">Calidad de vídeo</h3>
+                    <p className="text-gray-400 text-sm">Selecciona la calidad preferida</p>
+                  </div>
+                  <select className="p-2 bg-black/30 border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600">
+                    <option>Automática</option>
+                    <option>Alta (1080p)</option>
+                    <option>Media (720p)</option>
+                    <option>Baja (480p)</option>
                   </select>
                 </div>
               </div>
             </div>
+            
+            {/* Notificaciones */}
+            <div className="bg-gray-900 bg-opacity-50 rounded-xl p-6 border border-gray-700">
+              <h2 className="text-xl font-semibold mb-6">
+                <BellIcon className="w-6 h-6 inline-block mr-3" />
+                Preferencias de notificaciones
+              </h2>
+              
+              <div className="space-y-6">
+                <div className="flex items-center justify-between p-4 bg-gray-800 rounded-lg">
+                  <div>
+                    <h3 className="font-medium">Notificaciones por correo</h3>
+                    <p className="text-gray-400 text-sm">Recibir novedades por correo electrónico</p>
+                  </div>
+                  <label className="relative inline-flex items-center cursor-pointer">
+                    <input type="checkbox" className="sr-only peer" defaultChecked />
+                    <div className="w-11 h-6 bg-gray-700 peer-focus:ring-2 peer-focus:ring-blue-600 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                  </label>
+                </div>
+                
+                <div className="flex items-center justify-between p-4 bg-gray-800 rounded-lg">
+                  <div>
+                    <h3 className="font-medium">Notificaciones push</h3>
+                    <p className="text-gray-400 text-sm">Recibir notificaciones en el dispositivo</p>
+                  </div>
+                  <label className="relative inline-flex items-center cursor-pointer">
+                    <input type="checkbox" className="sr-only peer" defaultChecked />
+                    <div className="w-11 h-6 bg-gray-700 peer-focus:ring-2 peer-focus:ring-blue-600 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                  </label>
+                </div>
+              </div>
+            </div>
           </div>
         )}
-      </div>
 
-      {/* Modal de confirmación de eliminación */}
-      {showDeleteConfirmation && (
-        <div className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50">
-          <div className="bg-gray-900 rounded-xl p-8 max-w-md w-full mx-4 border border-gray-700">
-            <div className="text-center">
-              <div className="w-16 h-16 bg-red-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                <TrashIcon className="w-8 h-8 text-white" />
+        {/* Modal de confirmación para eliminar perfil */}
+        {showDeleteConfirmation && (
+          <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50">
+            <div className="bg-gray-900 rounded-xl p-8 max-w-md w-full border border-gray-700">
+              <div className="flex justify-center mb-6">
+                <div className="bg-red-500/20 w-16 h-16 rounded-full flex items-center justify-center">
+                  <TrashIcon className="w-8 h-8 text-red-500" />
+                </div>
               </div>
               
-              <h2 className="text-xl font-bold mb-2">¿Eliminar perfil?</h2>
-              <p className="text-gray-400 mb-6">
-                ¿Estás seguro de que quieres eliminar el perfil "{currentProfile.name}"? 
-                Esta acción no se puede deshacer.
+              <h2 className="text-2xl font-bold text-center mb-4">¿Eliminar perfil?</h2>
+              <p className="text-gray-400 text-center mb-8">
+                Esta acción eliminará permanentemente tu perfil y todos sus datos asociados. 
+                ¿Estás seguro de que deseas continuar?
               </p>
               
-              <div className="flex space-x-4">
-                <button
+              <div className="flex justify-center gap-4">
+                <button 
+                  className="px-8 py-3 bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors"
                   onClick={() => setShowDeleteConfirmation(false)}
-                  className="flex-1 bg-gray-700 hover:bg-gray-600 py-3 px-4 rounded-lg transition-colors"
                 >
                   Cancelar
                 </button>
-                <button
-                  onClick={() => {
-                    setShowDeleteConfirmation(false);
-                    handleDeleteProfile();
-                  }}
-                  className="flex-1 bg-red-600 hover:bg-red-700 py-3 px-4 rounded-lg transition-colors"
+                <button 
+                  className="px-8 py-3 bg-red-600 hover:bg-red-700 rounded-lg transition-colors"
+                  onClick={handleDeleteProfile}
                 >
                   Eliminar
                 </button>
               </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
+      </main>
     </div>
   );
 };
