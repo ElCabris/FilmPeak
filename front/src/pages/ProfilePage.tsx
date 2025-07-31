@@ -62,16 +62,8 @@ const ProfileSelectionScreen = () => {
     fetchProfiles();
   }, [navigate]);
 
-  const handleProfileSelect = (profile: Profile) => {
-    console.log(`Perfil seleccionado: ${profile.name}`);
-    
-    // Guardar el perfil seleccionado en localStorage
-    localStorage.setItem('selectedProfile', JSON.stringify({
-      name: profile.name,
-      avatar: profile.avatar,
-      email: localStorage.getItem('userEmail') || sessionStorage.getItem('userEmail')
-    }));
-    
+  const handleProfileSelect = (profileName: string) => {
+    console.log(`Perfil seleccionado: ${profileName}`);
     navigate('/SelectMovie');
   };
 
@@ -99,7 +91,7 @@ const ProfileSelectionScreen = () => {
           <div
             key={profile.name}
             className="flex flex-col items-center cursor-pointer group"
-            onClick={() => handleProfileSelect(profile)}
+            onClick={() => handleProfileSelect(profile.name)}
           >
             <div className="w-32 h-32 rounded-full border-4 border-transparent group-hover:border-white transition-all mb-4 overflow-hidden">
               <img
