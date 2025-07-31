@@ -66,10 +66,19 @@ const EditProfilePage = () => {
         body: JSON.stringify({
           email: userEmail,
           profile_name: name.trim(),
-          image: selectedAvatar // ahora se envía la imagen correctamente
+          image: selectedAvatar
         })
       });
 
+      // Manejar la respuesta del servidor
+      if (response.ok) {
+        // Redirigir a la página de perfiles después de guardar
+        navigate('/profiles');
+      } else {
+        // Mostrar mensaje de error si la respuesta no es exitosa
+        const errorData = await response.json();
+        setError(errorData.message || 'Error al crear el perfil');
+      }
     } catch (err) {
       console.error('Error de red:', err);
       setError('No se pudo conectar al servidor.');

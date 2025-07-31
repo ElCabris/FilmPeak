@@ -60,30 +60,9 @@ const WatchPage: React.FC = () => {
               </span>
             </div>
           </div>
-
-          <div className="md:w-1/3">
-            <div className="bg-gray-900/50 p-6 rounded-lg">
-              <h3 className="text-xl font-semibold mb-4">Episodios</h3>
-              <div className="space-y-4">
-                {[...Array(5)].map((_, i) => (
-                  <div
-                    key={i}
-                    className="flex items-center space-x-3 p-3 bg-gray-800/30 hover:bg-gray-800/50 rounded cursor-pointer transition-colors"
-                    onClick={() => navigate(`/watch/${id}?episode=${i + 1}`, { state: { movie } })}
-                  >
-                    <div className="bg-gray-700 w-16 h-16 rounded flex-shrink-0"></div>
-                    <div>
-                      <h4 className="font-medium">Episodio {i + 1}</h4>
-                      <p className="text-sm text-gray-400">45 min</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
           </div>
         </div>
       </div>
-    </div>
   );
 };
 

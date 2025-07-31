@@ -21,7 +21,6 @@ const ProfileSelectionScreen = () => {
 
   const MAX_PROFILES = 5;
 
-  // Efecto para manejar nuevos perfiles creados
   useEffect(() => {
     const fetchProfiles = async () => {
       const userEmail = localStorage.getItem('userEmail') || sessionStorage.getItem('userEmail');
@@ -45,7 +44,7 @@ const ProfileSelectionScreen = () => {
         const data = await response.json();
         const fetchedProfiles = data.profiles;
 
-        const defaultAvatar = mateoImage; // Imagen por defecto si no hay imagen
+        const defaultAvatar = mateoImage;
 
         const updatedProfiles: Profile[] = fetchedProfiles.map((p: any) => ({
           name: p.profile_name,
@@ -62,7 +61,6 @@ const ProfileSelectionScreen = () => {
 
     fetchProfiles();
   }, [navigate]);
-
 
   const handleProfileSelect = (profileName: string) => {
     console.log(`Perfil seleccionado: ${profileName}`);
@@ -82,7 +80,8 @@ const ProfileSelectionScreen = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 flex flex-col items-center pt-64 pb-12 px-4">
+<div className="min-h-screen bg-gradient-to-b from-black/100 via-black/92 to-black/90 flex flex-col items-center pt-64 pb-12 px-4">
+
       <h1 className="text-white text-5xl font-medium mb-32">
         ¿Quién está viendo ahora?
       </h1>

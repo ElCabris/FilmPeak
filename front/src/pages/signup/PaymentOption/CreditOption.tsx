@@ -5,6 +5,7 @@ import NavbarSignup from '../../../components/NavbarSignupSecond';
 import visaLogo from '../../../assets/Visa.webp';
 import mastercardLogo from '../../../assets/MasterCard.webp';
 import amexLogo from '../../../assets/amex.webp';
+import Notification from '../../../components/Notificator';
 
 interface PlanInfo {
   name: string;
@@ -15,9 +16,9 @@ interface PlanInfo {
 const CardPaymentPage: React.FC = () => {
   const navigate = useNavigate();
   const [plan, setPlan] = useState<PlanInfo | null>(null);
+  const [showNotification, setShowNotification] = useState(false);
 
   useEffect(() => {
-    // Simulación de información de planes desde localStorage
     const selected = localStorage.getItem('selectedPlan') || 'Premium';
     const allPlans: Record<string, PlanInfo> = {
       'Básico': { name: 'Básico', resolution: '720p (HD)', price: '$18.900' },
@@ -28,16 +29,31 @@ const CardPaymentPage: React.FC = () => {
   }, []);
 
   const handleStartMembership = () => {
-    navigate('/SelectMovie');
+    setShowNotification(true);
+    
+    // Redirigir después de 5 segundos
+    setTimeout(() => {
+      navigate('/SelectMovie');
+    }, 1100);
   };
 
   const handleChangePlan = () => {
-    navigate("/SelectPlanForm"); // Redirige a la página de selección de plan
+    navigate("/SelectPlanForm");
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-black/100 via-black/92 to-black/90 text-white flex flex-col">
       <NavbarSignup />
+      
+      {/* Notificación */}
+      {showNotification && (
+        <Notification
+          message="¡Pago realizado con éxito!"
+          type="success"
+          onClose={() => setShowNotification(false)}
+          duration={5000}
+        />
+      )}
 
       <main className="flex-grow px-6 py-16 mt-36 flex flex-col items-center">
         <h1 className="text-3xl md:text-4xl font-bold text-center mb-4">
@@ -48,16 +64,13 @@ const CardPaymentPage: React.FC = () => {
           Aceptamos tarjetas de crédito y débito Visa, Mastercard y American Express. Puedes cambiar tu forma de pago cuando quieras.
         </p>
 
-        {/* Logos */}
         <div className="flex gap-4 justify-center mb-6">
           <img src={visaLogo} alt="Visa" className="h-8" />
           <img src={mastercardLogo} alt="Mastercard" className="h-8" />
           <img src={amexLogo} alt="Amex" className="h-8" />
         </div>
 
-        {/* Formulario */}
         <div className="w-full max-w-lg space-y-6 bg-gray-900 text-white p-8 rounded-xl shadow-lg">
-          {/* Información del plan */}
           {plan && (
             <div className="bg-gray-800 p-4 rounded-md text-sm text-gray-300">
               <p><strong>Plan:</strong> {plan.name}</p>
@@ -66,7 +79,6 @@ const CardPaymentPage: React.FC = () => {
             </div>
           )}
 
-          {/* Campos de tarjeta */}
           <label className="block">
             <span className="block text-sm font-medium text-gray-300 mb-1">Número de tarjeta</span>
             <input
@@ -95,7 +107,6 @@ const CardPaymentPage: React.FC = () => {
             </label>
           </div>
 
-          {/* Cambiar plan */}
           <button
             onClick={handleChangePlan}
             className="text-blue-400 text-sm underline hover:text-blue-300 cursor-pointer"
@@ -103,7 +114,6 @@ const CardPaymentPage: React.FC = () => {
             Cambiar plan
           </button>
 
-          {/* Iniciar membresía */}
           <button
             onClick={handleStartMembership}
             className="w-full mt-10 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 py-4 rounded-xl text-lg font-semibold tracking-wide transition-all transform hover:scale-105 shadow-lg cursor-pointer"
