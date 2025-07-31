@@ -32,13 +32,16 @@ const WatchPage: React.FC = () => {
 
   return (
     <div className="bg-black text-white min-h-screen">
-      <VideoPlayer
-        title={movie.name}
-        videoSrc={`http://127.0.0.1:8000/movie/watch/${movie.id}`}
-        subtitle={movie.genre}
-        nextEpisode={nextEpisode}
-        prevEpisode={prevEpisode}
-      />
+      {/* Contenedor centrado con borde */}
+      <div className="max-w-screen-2xl mx-auto p-4">
+        <VideoPlayer
+          title={movie.name}
+          videoSrc={`http://127.0.0.1:8000/movie/watch/${movie.id}`}
+          subtitle={movie.genre}
+          nextEpisode={nextEpisode}
+          prevEpisode={prevEpisode}
+        />
+      </div>
 
       <div className="max-w-6xl mx-auto p-6">
         <div className="flex flex-col md:flex-row gap-8">
@@ -60,9 +63,9 @@ const WatchPage: React.FC = () => {
               </span>
             </div>
           </div>
-          </div>
         </div>
       </div>
+    </div>
   );
 };
 
