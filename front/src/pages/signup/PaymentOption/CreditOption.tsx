@@ -31,9 +31,9 @@ const CardPaymentPage: React.FC = () => {
   const handleStartMembership = () => {
     setShowNotification(true);
     
-    // Redirigir después de 5 segundos
+    // Redirigir después de 1 segundo
     setTimeout(() => {
-      navigate('/SelectMovie');
+      navigate("/profiles");
     }, 1100);
   };
 

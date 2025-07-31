@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { PencilIcon } from '@heroicons/react/24/outline';
+import { FaTrash } from 'react-icons/fa';
 import mateoImage from '../../assets/BoyIcon.webp';
 import andreImage from '../../assets/BoyIcon.webp';
 import alejandraImage from '../../assets/GirlIcon.webp';
@@ -14,22 +14,55 @@ interface Profile {
 const ManageProfilesScreen = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  
-  // Perfiles base
-  const [profiles] = React.useState<Profile[]>(location.state?.profiles || [
+
+  const [profiles, setProfiles] = useState<Profile[]>(location.state?.profiles || [
     { name: 'Mateo', avatar: mateoImage, isKidsProfile: false },
     { name: 'Andre', avatar: andreImage, isKidsProfile: false },
     { name: 'Alejandra', avatar: alejandraImage, isKidsProfile: false }
   ]);
 
-  const handleProfileClick = (profile: Profile) => {
-    // Codificar el nombre para URL
-    const encodedName = encodeURIComponent(profile.name);
-    navigate(`/settings-profiles/${encodedName}`, { state: { profile } });
+  const handleDeleteProfile = async (profileName: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+
+    const userEmail = localStorage.getItem('userEmail') || sessionStorage.getItem('userEmail');
+    if (!userEmail) {
+      alert('No se encontró el correo del usuario');
+      return;
+    }
+
+    const confirmDelete = window.confirm(`¿Seguro que deseas eliminar el perfil "${profileName}"?`);
+    if (!confirmDelete) return;
+
+    try {
+      const response = await fetch(`http://127.0.0.1:8000/user/profiles?email=${encodeURIComponent(userEmail)}&profile=${encodeURIComponent(profileName)}`, {
+        method: 'DELETE',
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error(`Error al eliminar perfil: ${response.status} - ${errorText}`);
+        alert('No se pudo eliminar el perfil');
+        return;
+      }
+
+      alert(`Perfil "${profileName}" eliminado correctamente`);
+
+      // Filtra el perfil eliminado y actualiza el estado
+      const updatedProfiles = profiles.filter(p => p.name !== profileName);
+      setProfiles(updatedProfiles);
+
+      // Si no quedan perfiles, redirige inmediatamente
+      if (updatedProfiles.length === 0) {
+        navigate('/profiles');
+      }
+    } catch (error) {
+      console.error('Error en la conexión:', error);
+      alert('Ocurrió un error al intentar eliminar el perfil');
+    }
   };
 
   const handleDone = () => {
-    navigate('/profile-selection');
+    navigate('/profiles');
   };
 
   return (
@@ -42,8 +75,7 @@ const ManageProfilesScreen = () => {
         {profiles.map((profile) => (
           <div 
             key={profile.name}
-            className="flex flex-col items-center relative cursor-pointer"
-            onClick={() => handleProfileClick(profile)}
+            className="flex flex-col items-center"
           >
             <div className="relative w-48 h-48 rounded-full mb-4 overflow-hidden">
               <img 
@@ -51,16 +83,19 @@ const ManageProfilesScreen = () => {
                 alt={`Perfil de ${profile.name}`} 
                 className="w-full h-full object-cover"
               />
-              
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="bg-blue-600 p-3 rounded-full border-4 border-white shadow-lg">
-                  <PencilIcon className="w-10 h-10 text-white" />
-                </div>
-              </div>
             </div>
-            <span className="text-2xl text-gray-300 font-medium mt-2">
+            
+            <span className="text-2xl text-gray-300 font-medium mb-4">
               {profile.name}
             </span>
+            
+            <button
+              className="flex items-center justify-center gap-2 bg-red-600 text-white py-2 px-4 rounded-md hover:bg-red-700 transition-colors"
+              onClick={(e) => handleDeleteProfile(profile.name, e)}
+            >
+              <FaTrash className="text-white" />
+              <span>Borrar</span>
+            </button>
           </div>
         ))}
       </div>
