@@ -2,14 +2,16 @@ from pathlib import Path
 from typing import Optional
 from sqlite3 import Error
 from pydantic import ValidationError
-from app.schemas.movie import MovieBase, MovieCreate
+from app.schemas.movie import MovieResponse, MovieCreate, MovieBase
 from app.database.read_movie import read_movie
 from typing import Any
+from app.services.encode_image import encode_image_to_base64
 
 
-def create_movie_base(movie_data: dict[str, Any]) -> MovieBase:
+def create_movie_response(movie_data: dict[str, Any]) -> MovieResponse:
+    image = encode_image_to_base64(movie_data.get("image"))
 
-    return MovieBase(
+    result = MovieResponse(
         id=movie_data.get("id"),
         name=movie_data.get("title"),
         year=movie_data.get("movie_data"),
@@ -17,7 +19,10 @@ def create_movie_base(movie_data: dict[str, Any]) -> MovieBase:
         duration_minutes=movie_data.get("duration_minutes"),
         score=movie_data.get("score"),
         genre=movie_data.get("genre"),
+        image=image,
     )
+
+    return result
 
 
 def get_movie(movie_id: int) -> Optional[MovieBase]:
