@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { FaTrash } from 'react-icons/fa';
 import mateoImage from '../../assets/BoyIcon.webp';
@@ -14,19 +14,51 @@ interface Profile {
 const ManageProfilesScreen = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  
-  // Perfiles base
-  const [profiles] = React.useState<Profile[]>(location.state?.profiles || [
+
+  const [profiles, setProfiles] = useState<Profile[]>(location.state?.profiles || [
     { name: 'Mateo', avatar: mateoImage, isKidsProfile: false },
     { name: 'Andre', avatar: andreImage, isKidsProfile: false },
     { name: 'Alejandra', avatar: alejandraImage, isKidsProfile: false }
   ]);
 
-  const handleDeleteProfile = (profileName: string, e: React.MouseEvent) => {
+  const handleDeleteProfile = async (profileName: string, e: React.MouseEvent) => {
     e.stopPropagation();
-    console.log(`Eliminar perfil: ${profileName}`);
-    // Aquí iría la lógica para eliminar el perfil de la base de datos
-    // alert(`Perfil "${profileName}" eliminado`);
+
+    const userEmail = localStorage.getItem('userEmail') || sessionStorage.getItem('userEmail');
+    if (!userEmail) {
+      alert('No se encontró el correo del usuario');
+      return;
+    }
+
+    const confirmDelete = window.confirm(`¿Seguro que deseas eliminar el perfil "${profileName}"?`);
+    if (!confirmDelete) return;
+
+    try {
+      const response = await fetch(`http://127.0.0.1:8000/user/profiles?email=${encodeURIComponent(userEmail)}&profile=${encodeURIComponent(profileName)}`, {
+        method: 'DELETE',
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error(`Error al eliminar perfil: ${response.status} - ${errorText}`);
+        alert('No se pudo eliminar el perfil');
+        return;
+      }
+
+      alert(`Perfil "${profileName}" eliminado correctamente`);
+
+      // Filtra el perfil eliminado y actualiza el estado
+      const updatedProfiles = profiles.filter(p => p.name !== profileName);
+      setProfiles(updatedProfiles);
+
+      // Si no quedan perfiles, redirige inmediatamente
+      if (updatedProfiles.length === 0) {
+        navigate('/profiles');
+      }
+    } catch (error) {
+      console.error('Error en la conexión:', error);
+      alert('Ocurrió un error al intentar eliminar el perfil');
+    }
   };
 
   const handleDone = () => {
