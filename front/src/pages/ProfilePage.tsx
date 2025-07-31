@@ -62,10 +62,12 @@ const ProfileSelectionScreen = () => {
     fetchProfiles();
   }, [navigate]);
 
-  const handleProfileSelect = (profileName: string) => {
-    console.log(`Perfil seleccionado: ${profileName}`);
-    navigate('/SelectMovie');
-  };
+const handleProfileSelect = (profile: Profile) => {
+  sessionStorage.setItem('selectedProfileName', profile.name);
+  sessionStorage.setItem('selectedProfileAvatar', profile.avatar);
+  navigate('/SelectMovie');
+};
+
 
   const handleAddProfile = () => {
     if (profiles.length >= MAX_PROFILES) {
@@ -91,7 +93,7 @@ const ProfileSelectionScreen = () => {
           <div
             key={profile.name}
             className="flex flex-col items-center cursor-pointer group"
-            onClick={() => handleProfileSelect(profile.name)}
+            onClick={() => handleProfileSelect(profile)}
           >
             <div className="w-32 h-32 rounded-full border-4 border-transparent group-hover:border-white transition-all mb-4 overflow-hidden">
               <img
