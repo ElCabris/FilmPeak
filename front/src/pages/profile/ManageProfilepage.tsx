@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { PencilIcon } from '@heroicons/react/24/outline';
+import { FaTrash } from 'react-icons/fa';
 import mateoImage from '../../assets/BoyIcon.webp';
 import andreImage from '../../assets/BoyIcon.webp';
 import alejandraImage from '../../assets/GirlIcon.webp';
@@ -22,14 +22,15 @@ const ManageProfilesScreen = () => {
     { name: 'Alejandra', avatar: alejandraImage, isKidsProfile: false }
   ]);
 
-  const handleProfileClick = (profile: Profile) => {
-    // Codificar el nombre para URL
-    const encodedName = encodeURIComponent(profile.name);
-    navigate(`/settings-profiles/${encodedName}`, { state: { profile } });
+  const handleDeleteProfile = (profileName: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    console.log(`Eliminar perfil: ${profileName}`);
+    // Aquí iría la lógica para eliminar el perfil de la base de datos
+    // alert(`Perfil "${profileName}" eliminado`);
   };
 
   const handleDone = () => {
-    navigate('/profile-selection');
+    navigate('/profiles');
   };
 
   return (
@@ -42,8 +43,7 @@ const ManageProfilesScreen = () => {
         {profiles.map((profile) => (
           <div 
             key={profile.name}
-            className="flex flex-col items-center relative cursor-pointer"
-            onClick={() => handleProfileClick(profile)}
+            className="flex flex-col items-center"
           >
             <div className="relative w-48 h-48 rounded-full mb-4 overflow-hidden">
               <img 
@@ -51,16 +51,19 @@ const ManageProfilesScreen = () => {
                 alt={`Perfil de ${profile.name}`} 
                 className="w-full h-full object-cover"
               />
-              
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="bg-blue-600 p-3 rounded-full border-4 border-white shadow-lg">
-                  <PencilIcon className="w-10 h-10 text-white" />
-                </div>
-              </div>
             </div>
-            <span className="text-2xl text-gray-300 font-medium mt-2">
+            
+            <span className="text-2xl text-gray-300 font-medium mb-4">
               {profile.name}
             </span>
+            
+            <button
+              className="flex items-center justify-center gap-2 bg-red-600 text-white py-2 px-4 rounded-md hover:bg-red-700 transition-colors"
+              onClick={(e) => handleDeleteProfile(profile.name, e)}
+            >
+              <FaTrash className="text-white" />
+              <span>Borrar</span>
+            </button>
           </div>
         ))}
       </div>
