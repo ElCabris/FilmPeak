@@ -34,7 +34,7 @@ const CardPaymentPage: React.FC = () => {
     // Redirigir después de 5 segundos
     setTimeout(() => {
       navigate('/SelectMovie');
-    }, 1500);
+    }, 1100);
   };
 
   const handleChangePlan = () => {

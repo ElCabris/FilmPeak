@@ -61,7 +61,7 @@ const HomePage: React.FC = () => {
   const games = mapMoviesWithClick(movies, 3);
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white">
+      <div className="min-h-screen bg-gradient-to-b from-black/100 via-black/92 to-black/90 text-white flex flex-col">
       <Navbar />
       <main className="pt-35 pb-10">
         <div className="max-w-7xl mx-auto px-4">

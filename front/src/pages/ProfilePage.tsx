@@ -21,7 +21,6 @@ const ProfileSelectionScreen = () => {
 
   const MAX_PROFILES = 5;
 
-  // Efecto para manejar nuevos perfiles creados
   useEffect(() => {
     const fetchProfiles = async () => {
       const userEmail = localStorage.getItem('userEmail') || sessionStorage.getItem('userEmail');
@@ -45,7 +44,7 @@ const ProfileSelectionScreen = () => {
         const data = await response.json();
         const fetchedProfiles = data.profiles;
 
-        const defaultAvatar = mateoImage; // Imagen por defecto si no hay imagen
+        const defaultAvatar = mateoImage;
 
         const updatedProfiles: Profile[] = fetchedProfiles.map((p: any) => ({
           name: p.profile_name,
@@ -63,9 +62,16 @@ const ProfileSelectionScreen = () => {
     fetchProfiles();
   }, [navigate]);
 
-
-  const handleProfileSelect = (profileName: string) => {
-    console.log(`Perfil seleccionado: ${profileName}`);
+  const handleProfileSelect = (profile: Profile) => {
+    console.log(`Perfil seleccionado: ${profile.name}`);
+    
+    // Guardar el perfil seleccionado en localStorage
+    localStorage.setItem('selectedProfile', JSON.stringify({
+      name: profile.name,
+      avatar: profile.avatar,
+      email: localStorage.getItem('userEmail') || sessionStorage.getItem('userEmail')
+    }));
+    
     navigate('/SelectMovie');
   };
 
@@ -82,7 +88,8 @@ const ProfileSelectionScreen = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 flex flex-col items-center pt-64 pb-12 px-4">
+<div className="min-h-screen bg-gradient-to-b from-black/100 via-black/92 to-black/90 flex flex-col items-center pt-64 pb-12 px-4">
+
       <h1 className="text-white text-5xl font-medium mb-32">
         ¿Quién está viendo ahora?
       </h1>
@@ -92,7 +99,7 @@ const ProfileSelectionScreen = () => {
           <div
             key={profile.name}
             className="flex flex-col items-center cursor-pointer group"
-            onClick={() => handleProfileSelect(profile.name)}
+            onClick={() => handleProfileSelect(profile)}
           >
             <div className="w-32 h-32 rounded-full border-4 border-transparent group-hover:border-white transition-all mb-4 overflow-hidden">
               <img
